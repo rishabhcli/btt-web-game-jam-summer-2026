@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./.dev/cache/typescript/app.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "rootDir": "./src",
+    "outDir": "./.dev/cache/typescript/app-types"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/build-status.ts",
+    "src/domain/**",
+    "src/engine/**",
+    "src/ghosts/**",
+    "src/levels/**",
+    "src/history/domain/**"
+  ],
+  "references": [{ "path": "./tsconfig.domain.json" }]
+}

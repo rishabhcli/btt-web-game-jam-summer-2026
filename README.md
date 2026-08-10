@@ -6,7 +6,9 @@
 
 ## Repository status
 
-Implementation has not started. The repository currently contains the authoritative product and competition specifications. This README defines the production target that future code must satisfy; it does not claim that planned commands or components already exist.
+Tier 0 foundation implementation is in progress. The repository now contains an exact-pinned TypeScript/Vite toolchain, a truthful non-playable browser shell, strict verification configuration, and a repository-owned development-service lifecycle. The eight-room game, deterministic kernel, native-history bridge, ghosts, persistence, production deployment, and release evidence do not exist yet. This foundation is not a playable release and the repository is **not yet in production**.
+
+No command, browser row, or current-worktree observation is a release claim. Promotion requires the committed clean-checkout evidence defined in `GOAL.md` and `evidence/README.md`; until that artifact exists and passes, Tier 0 itself remains incomplete.
 
 | Document | Authority |
 |---|---|
@@ -14,6 +16,7 @@ Implementation has not started. The repository currently contains the authoritat
 | [WINNING_IDEA.md](./WINNING_IDEA.md) | Selected concept, hard technical core, validation, build order, demo and risk analysis |
 | [README.md](./README.md) | Product contract, architecture, production and release expectations |
 | [AGENTS.md](./AGENTS.md) | Binding implementation rules for every coding agent working in this repository |
+| [GOAL.md](./GOAL.md) | Standing execution order, dev-service contract, production clauses, tier ladder, ratchets, and perpetual epoch engine |
 
 If these documents disagree, preserve the external requirements in HACKATHON.md, then the product intent in WINNING_IDEA.md, and resolve the conflict explicitly in an ADR instead of guessing.
 
@@ -159,21 +162,24 @@ This is a boundary contract, not a command to create empty directories. Add a di
 
 ## Development command contract
 
-No commands are advertised as working until the corresponding toolchain is committed. The first production scaffold must expose one documented, cross-platform command surface, preferably through a checked-in task runner or Makefile:
+The current Tier 0 command surface is exposed through npm scripts and matching `make` targets. These commands verify the foundation that exists; they do not imply that the planned gameplay or release gates exist.
 
-| Command | Required behavior |
+| Command | Current behavior and boundary |
 |---|---|
-| `bootstrap` | Verify tool versions, install locked dependencies, initialize only local non-secret state |
-| `check` | Format check, lint, type/static analysis, schema/config validation |
-| `test` | Deterministic unit and property suites |
-| `test-integration` | Real boundary tests using isolated local/test dependencies |
-| `test-e2e` | Supported user workflows and failure states |
-| `eval` | Reproduce committed domain evaluation and metrics |
-| `build` | Produce release artifacts from a clean checkout |
-| `run-local` | Start the complete local system or a documented production-equivalent subset |
-| `release-check` | Run all blocking gates, artifact/SBOM generation, and policy checks |
+| `npm run bootstrap` | Requires the exact checked-in Node/npm release-tool versions, installs the lockfile graph with strict install-script policy, invokes Playwright `install-deps` on Linux (which may install required host OS libraries), and installs browser binaries only under `.dev/cache/playwright` |
+| `npm run check` | Runs Prettier check, typed ESLint, all TypeScript project references, and the AST ownership-boundary policy |
+| `npm test` | Runs the currently implemented unit/property selection and production tooling tests; the suite expands with each tier |
+| `npm run test:integration` | Runs real-browser tests marked `@integration` against the isolated E2E service |
+| `npm run test:e2e` | Runs Chromium, Firefox, and WebKit with zero retries and an isolated profile; it reuses port 4142 only after exact repository ownership and health validation |
+| `npm run test:e2e:preview` | Builds and runs the browser/a11y surface against the production preview on port 4141 |
+| `npm run test:e2e:static` | Builds and runs the browser/a11y surface against the static bundle server on port 4143 |
+| `npm run build` | Type-checks project references and emits the static Vite artifact to `dist/` |
+| `npm run dev:preflight` | Fails closed on any foreign listener in 4140–4149 and validates repository-local development state |
+| `npm run dev:up` / `npm run dev:health` / `npm run dev:down` | Starts, proves, and exactly stops the four loopback-only repository services without broad process signals |
+| `npm run verify-all` | Preserves a unique pass/fail evidence run, executes the blocking Tier 0 checks and browser/build surfaces, and always performs exact lifecycle cleanup |
+| `npm run clean` | Removes only declared generated build, coverage, and browser-test output; it does not erase preserved evidence or PID state |
 
-A new contributor should be able to move from a clean checkout to a verified local system without tribal knowledge.
+`eval`, SBOM/release-manifest generation, gameplay/property gates, deployment, and production release commands are added only with their owning tiers. Their absence is an incomplete gate, not an invitation to publish a placeholder command. A new contributor must ultimately be able to move from a clean checkout to a verified local system without tribal knowledge.
 
 ## Environment model
 

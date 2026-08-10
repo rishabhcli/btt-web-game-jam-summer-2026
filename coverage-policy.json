@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "btt.coverage-policy/v1",
+  "minimumInstrumentedFiles": 2,
+  "minimumInstrumentedStatements": 5,
+  "minimumInstrumentedFunctions": 2,
+  "minimumInstrumentedBranches": 2,
+  "maximumExcludedRuntimeFiles": 1,
+  "maximumExcludedRuntimeBytes": 384,
+  "excludedRuntimeSources": {
+    "src/main.ts": {
+      "reason": "Browser-only composition entry delegates all behavior to covered modules and is exercised by real-engine E2E.",
+      "maxBytes": 384
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.dev/
+AGENTS.md
+coverage/
+dist/
+GOAL.md
+HACKATHON.md
+node_modules/
+package-lock.json
+playwright-report/
+PROGRESS.md
+README.md
+test-results/
+evidence/verify-all-latest.md
+evidence/runs/
+WINNING_IDEA.md

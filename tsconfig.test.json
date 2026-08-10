@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./.dev/cache/typescript/test.tsbuildinfo",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "tests/unit/**/*.ts",
+    "tests/property/**/*.ts",
+    "tests/integration/**/*.ts"
+  ],
+  "references": [
+    { "path": "./tsconfig.domain.json" },
+    { "path": "./tsconfig.app.json" }
+  ]
+}

@@ -510,3 +510,136 @@ both are fixed and the final commit is reverified.
   schema, dependency, or service allocation.
 - External blockers: none. The two red Tier 0 gates are repository work, not
   user or third-party blockers.
+
+## 2026-08-10 13:20 PDT — First green clean-checkout `verify-all`
+
+### Production state and user outcome
+
+Not yet in production and still not playable. This entry repairs the
+verification machinery only; no gameplay, engine, history bridge, ghost, room,
+renderer, audio, persistence, or deployment exists. The browser outcome is still
+the truthful non-playable foundation status page.
+
+What changed is that the canonical gate can now run to completion and be
+believed. Before this work `npm run verify-all` could not pass on any machine,
+and `npm run bootstrap` could not pass under `npm run` at all.
+
+### Work performed
+
+Three independent fail-closed defects were found and repaired, each with a named
+regression test. All three were invisible to the existing suite because the
+existing tests injected synthetic results at exactly the boundary that was
+broken.
+
+1. **`vite.config.ts:61` typed-lint failure.** The resolved-service boundary
+   compared `config.server.fs.strict` to `true`, which
+   `@typescript-eslint/no-unnecessary-boolean-literal-compare` rejected. Rather
+   than dropping the comparison, the check now goes through an explicit
+   `isExactlyTrue` boundary predicate that treats the runtime-resolved value as
+   untrusted and refuses a truthy substitute (`1`, `"false"`, `{}`) as firmly as
+   `false`. The same predicate now guards `strictPort`.
+   `assertResolvedServiceConfig` is exported so the boundary is attacked
+   directly instead of only through a Vite plugin hook.
+
+2. **`npm run bootstrap` could never succeed.** npm exports its own resolved
+   `npm_config_userconfig` into every run-script environment, and the install
+   policy check rejected that variable by name. The check now refuses a
+   *redirect* — any path that is neither this repository's committed `.npmrc`
+   nor the invoking account's default `~/.npmrc` — which is the protection that
+   was actually intended. A key carrying `undefined`/`null` is now treated as an
+   absent variable rather than the string `"undefined"`.
+
+3. **`verify-all`'s browser-integrity probe emitted unparseable output.** Inside
+   a `String.raw` template the probe ended with `"\\n"`, so it wrote a literal
+   backslash-n. `parseBrowserEvidence` therefore always returned `null`, and
+   every run failed with `PLAYWRIGHT_BROWSER_VERSIONS_UNAVAILABLE` and
+   `BROWSER_INTEGRITY_CHANGED_DURING_RUN`. A PASS outcome was unreachable by
+   construction.
+
+4. **`verify-all` killed the services it had just started.** The owned process
+   runner treats any descendant alive after the leader exits as a leak, but
+   `dev:up` exists to leave four supervised services running. The runner now
+   accepts a `declareSurvivingDescendants` callback evaluated after leader exit
+   and before the leak decision; `verify-all` supplies it for `dev_up` only,
+   deriving permitted PIDs from that command's own `DEV_LIFECYCLE_RESULT`
+   ownership proof. Survivors must be exactly the declared identities plus their
+   live descendants. An absent, malformed, empty, throwing, or non-covering
+   declaration fails closed. Because a survivor outlives the launcher's per-run
+   scratch, declaring survivors now requires a caller-owned home directory
+   (`.dev/tmp/lifecycle-home`), and the runner removes its scratch when
+   environment setup fails.
+
+### Commands and observed evidence
+
+All commands ran on the pinned Node.js 24.19.0 / npm 11.17.0 toolchain by
+prepending `.dev/cache/toolchains/node-v24.19.0-darwin-arm64/bin` to `PATH`.
+
+```text
+npm run dev:preflight
+npm run dev:health
+npm run dev:down
+npm run bootstrap
+npm run check
+npm test
+node --test tests/tooling/bootstrap.test.mjs
+node --test tests/tooling/config-environment.test.mjs
+node --test tests/tooling/verify-all.test.mjs
+node --test tests/tooling/owned-process-runner.test.mjs
+npm run verify-all
+```
+
+Observed results:
+
+- `npm run bootstrap` exits **0** for the first time, installing 173 packages
+  under the locked install-script policy and reporting zero vulnerabilities.
+- `npm run check` is green: Prettier, typed ESLint, all TypeScript project
+  references, and the AST ownership-boundary policy.
+- `npm test` passes **102/102** tooling tests and **2/2** unit tests. The unit
+  coverage remains five statements across two foundation files; it is not
+  gameplay coverage.
+- `npm run verify-all` **PASSED from a clean checkout** at commit
+  `613b8e4937fe174957918838357c89b954eabb7b`. All 25 recorded steps passed with
+  an empty `failureCodes` array. Preserved artifact:
+  `evidence/runs/20260810T201403.217Z-db08bdbf876e/` (`summary.md`,
+  `manifest.json`, `events.jsonl`, `SHA256SUMS`), 194025 ms, clean at start
+  `yes`.
+- Within that run: three-browser E2E on the owned 4142 service, Chromium E2E
+  against the production preview on 4141 and the static bundle on 4143, a real
+  four-service `dev:up`/`dev:health`/`dev:down` lifecycle, and stable
+  start/end digests for source, discovered inputs, tooling, browsers, and the
+  served build.
+- Two preserved FAIL runs are committed alongside it as the raw observations for
+  defects 1 and 3: `evidence/runs/20260810T152632.603Z-2b1f1df77a07/` and
+  `evidence/runs/20260810T192538.286Z-0f315ef731c5/`.
+
+### What became true
+
+- The canonical Tier 0 verifier has passed end to end from a clean checkout for
+  the first time in this repository's history, and the exact artifact that
+  proves it is committed rather than described.
+- Three defects that made the gate unreachable are fixed with tests that fail if
+  they return, rather than with looser gates.
+- The repository's own leak policy now distinguishes a declared, proven service
+  handover from an undeclared leak, instead of forbidding both.
+
+### Risks, migration, rollback, blockers
+
+- Risks: no green GitHub Actions run exists yet, so the clean-checkout proof is
+  still workstation-only. Whether a detached supervisor is *tracked* before its
+  launcher exits is timing-dependent (recorded as A-0016), so this run took the
+  "no live tracked descendant" path and did not exercise the declaration in
+  production; the declaration path is proven by a real-process tooling test
+  instead. No application invariant exists in code yet.
+- Migration: none. No player persistence schema or saved player data exists.
+- Rollback: revert `613b8e4` and `34c11f6`; both are verification-machinery
+  changes with no runtime game behavior, no schema, and no port reallocation.
+- External blockers: none.
+
+### Next selected item
+
+`GOAL.md` section 10.1 item 2 — the remaining failing release gate is CI, which
+has never reached verification. Push these commits and require a green GitHub
+Actions run for `main`, then begin Tier 1: create `src/engine` with a versioned
+serializable command schema, canonical `WorldState`, pure reducer, deterministic
+serialization/hash contract, and seeded randomness, with named property tests
+per invariant.

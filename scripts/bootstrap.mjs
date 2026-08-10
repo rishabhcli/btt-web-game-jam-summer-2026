@@ -1,4 +1,5 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, realpathSync } from "node:fs";
+import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -55,6 +56,39 @@ function sanitizedEnvironment(environment) {
   });
 }
 
+function canonicalPath(value) {
+  const absolute = resolve(value);
+  try {
+    return realpathSync(absolute);
+  } catch {
+    return absolute;
+  }
+}
+
+/**
+ * npm exports its own resolved `npm_config_userconfig` into every run-script
+ * environment, so the variable's presence is not evidence of tampering: on a
+ * GitHub Actions runner `npm run bootstrap` always sets it to `$HOME/.npmrc`.
+ * What must fail closed is a *redirect* — a value pointing at a config npm
+ * would not otherwise have read. Only this repository's committed `.npmrc` and
+ * the invoking account's default user config are trusted; the install children
+ * are pinned to the repository file regardless, and the policy probe re-checks
+ * the effective flags afterwards.
+ */
+export function trustedNpmUserConfigPaths(environment) {
+  const paths = new Set([canonicalPath(".npmrc")]);
+  for (const home of [
+    environment?.["HOME"],
+    environment?.["USERPROFILE"],
+    homedir(),
+  ]) {
+    if (typeof home === "string" && home.length > 0) {
+      paths.add(canonicalPath(resolve(home, ".npmrc")));
+    }
+  }
+  return paths;
+}
+
 export function validateBootstrapEnvironment(environment) {
   const unsafe = [
     "dangerously_allow_all_scripts",
@@ -76,13 +110,31 @@ export function validateBootstrapEnvironment(environment) {
         key === `npm_config_${name}` ||
         key === `npm_config_${name.replaceAll("_", "-")}`,
     );
-    if (option && String(rawValue).length > 0) {
-      fail(
-        "BOOTSTRAP_NPM_POLICY_OVERRIDE",
-        `${rawKey} may not alter the locked install policy`,
-        2,
-      );
+    // A key carrying `undefined`/`null` is an absent variable, not an override;
+    // spawn never forwards one. Anything else is stringified and judged.
+    if (!option || rawValue === undefined || rawValue === null) {
+      continue;
     }
+    const value = String(rawValue);
+    if (value.length === 0) {
+      continue;
+    }
+    if (option === "userconfig") {
+      const trusted = trustedNpmUserConfigPaths(environment);
+      if (!trusted.has(canonicalPath(value))) {
+        fail(
+          "BOOTSTRAP_NPM_POLICY_OVERRIDE",
+          `${rawKey}=${value} redirects npm configuration away from the repository .npmrc and the invoking account default (${[...trusted].join(", ")})`,
+          2,
+        );
+      }
+      continue;
+    }
+    fail(
+      "BOOTSTRAP_NPM_POLICY_OVERRIDE",
+      `${rawKey} may not alter the locked install policy`,
+      2,
+    );
   }
 }
 

@@ -9,6 +9,7 @@ import {
   EXPECTED_NPM_VERSION,
   LOCKED_NPM_CI_ARGUMENTS,
   LOCKED_NPM_SCRIPT_POLICY_ARGUMENTS,
+  trustedNpmUserConfigPaths,
   validateBootstrapEnvironment,
   validateBootstrapRuntime,
   validateLockedToolchainManifest,
@@ -61,6 +62,59 @@ test("bootstrap rejects ambient npm graph and install-script policy overrides", 
   assert.doesNotThrow(() =>
     validateBootstrapEnvironment({ npm_execpath: "/safe/npm-cli.js" }),
   );
+});
+
+test("bootstrap accepts the exact npm_config_userconfig npm exports on a GitHub Actions runner", () => {
+  // `npm run bootstrap` always exports npm's own resolved user config. On
+  // ubuntu-24.04 with actions/setup-node that is exactly $HOME/.npmrc, which is
+  // the same file npm reads with or without the variable.
+  const actionsEnvironment = {
+    CI: "true",
+    GITHUB_ACTIONS: "true",
+    HOME: "/home/runner",
+    npm_config_userconfig: "/home/runner/.npmrc",
+    npm_execpath:
+      "/opt/hostedtoolcache/node/24.19.0/x64/lib/node_modules/npm/bin/npm-cli.js",
+  };
+  assert.doesNotThrow(() => validateBootstrapEnvironment(actionsEnvironment));
+  assert.doesNotThrow(() =>
+    validateBootstrapEnvironment({
+      ...actionsEnvironment,
+      npm_config_userconfig: undefined,
+      NPM_CONFIG_USERCONFIG: "/home/runner/.npmrc",
+    }),
+  );
+  assert.doesNotThrow(() =>
+    validateBootstrapEnvironment({
+      npm_config_userconfig: resolve(".npmrc"),
+    }),
+  );
+  assert.ok(
+    trustedNpmUserConfigPaths({ HOME: "/home/runner" }).has(
+      "/home/runner/.npmrc",
+    ),
+  );
+});
+
+test("bootstrap still refuses an npm_config_userconfig redirected off the trusted pair", () => {
+  for (const redirect of [
+    "/home/runner/work/_temp/.npmrc",
+    "/tmp/attacker/.npmrc",
+    "/home/runner/.npmrc.attacker",
+    resolve(".dev/tmp/.npmrc"),
+    resolve("node_modules/.npmrc"),
+    "true",
+  ]) {
+    assert.throws(
+      () =>
+        validateBootstrapEnvironment({
+          HOME: "/home/runner",
+          npm_config_userconfig: redirect,
+        }),
+      { code: "BOOTSTRAP_NPM_POLICY_OVERRIDE" },
+      `${redirect} was accepted as a trusted npm user config`,
+    );
+  }
 });
 
 test("bootstrap rejects a different npm version or unidentifiable executable", () => {

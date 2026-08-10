@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   mkdir,
@@ -17,6 +18,8 @@ import { format as formatWithPrettier } from "prettier";
 import {
   createProcessRunner,
   ownedProcessTreeTarget,
+  parseBrowserEvidence,
+  PLAYWRIGHT_VERSION_PROBE,
   runVerification,
   runVerificationForTest,
 } from "../../scripts/verify-all.mjs";
@@ -915,6 +918,62 @@ test("tool and browser integrity are rechecked at the end", async (t) => {
   );
   assert.equal(result.manifest.toolIntegrity.stable, false);
   assert.equal(result.manifest.system.playwright.browserIntegrityStable, false);
+});
+
+// Every other browser-integrity test injects synthetic probe stdout, so the
+// embedded probe's own output contract was previously unverified: it emitted a
+// literal backslash-n suffix, which made parseBrowserEvidence return null and
+// made a PASS outcome unreachable on a correctly bootstrapped machine. These
+// tests exercise the real probe text.
+test("the embedded Playwright probe emits evidence the real parser accepts", async () => {
+  const browsersPath = path.join(repositoryRoot, ".dev", "cache", "playwright");
+  const probe = spawnSync(
+    process.execPath,
+    ["--input-type=module", "--eval", PLAYWRIGHT_VERSION_PROBE],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+      env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: browsersPath },
+      maxBuffer: 4 * 1024 * 1024,
+      timeout: 120_000,
+    },
+  );
+
+  assert.equal(
+    probe.status,
+    0,
+    `probe exited ${String(probe.status)}: ${probe.stderr}`,
+  );
+  assert.match(probe.stdout, /\}\n$/u, "probe output must end with a newline");
+  assert.doesNotMatch(
+    probe.stdout,
+    /\\n/u,
+    "probe output must not contain an escaped newline literal",
+  );
+
+  const evidence = parseBrowserEvidence(probe.stdout, "PASS");
+  assert.notEqual(
+    evidence,
+    null,
+    `probe output was unparseable: ${probe.stdout}`,
+  );
+  assert.deepEqual(Object.keys(evidence).sort(), [
+    "chromium",
+    "firefox",
+    "webkit",
+  ]);
+  for (const [name, entry] of Object.entries(evidence)) {
+    assert.match(entry.executable.sha256, /^[0-9a-f]{64}$/u, name);
+    assert.ok(entry.executable.bytes > 0, name);
+    assert.ok(entry.version.length > 0, name);
+  }
+});
+
+test("browser evidence with a trailing escaped-newline literal is refused", () => {
+  const payload = JSON.stringify(browserEvidence());
+  assert.notEqual(parseBrowserEvidence(`${payload}\n`, "PASS"), null);
+  assert.equal(parseBrowserEvidence(`${payload}\\n`, "PASS"), null);
+  assert.equal(parseBrowserEvidence(`${payload}\n`, "FAIL"), null);
 });
 
 test("total deadline aborts work but preserves bounded final evidence", async (t) => {

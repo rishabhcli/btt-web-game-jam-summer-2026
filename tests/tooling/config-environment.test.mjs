@@ -12,9 +12,38 @@ if (previousTarget === undefined) {
   process.env.BTT_E2E_TARGET = previousTarget;
 }
 
-const viteConfiguration = (
-  await import(`../../vite.config.ts?environment-policy=${String(Date.now())}`)
-).default;
+const viteModule = await import(
+  `../../vite.config.ts?environment-policy=${String(Date.now())}`
+);
+const viteConfiguration = viteModule.default;
+const { assertResolvedServiceConfig } = viteModule;
+
+/**
+ * Builds the shape Vite hands to `configResolved` from the real configuration
+ * this repository ships, so the boundary test cannot drift away from it.
+ */
+async function resolvedServiceConfigFixture() {
+  const built = await viteConfiguration({
+    command: "build",
+    isPreview: false,
+    isSsrBuild: false,
+    mode: "production",
+  });
+  return {
+    root: process.cwd(),
+    server: {
+      ...built.server,
+      fs: { ...built.server.fs },
+      headers: { "X-BTT-Service-Id": "game-dev" },
+      port: 4140,
+      watch: { ...built.server.watch },
+    },
+    preview: {
+      ...built.preview,
+      headers: { "X-BTT-Service-Id": "production-preview" },
+    },
+  };
+}
 
 test("Playwright web-server children reject credential, Vite, PATH, and proxy injection", () => {
   const environment = createPlaywrightChildEnvironment({
@@ -67,6 +96,87 @@ test("Vite disables implicit env files and the conventional VITE exposure channe
   for (const pattern of ["**/.dev/**", "**/dist/**", "**/test-results/**"]) {
     assert.ok(configuration.server.watch.ignored.includes(pattern));
   }
+});
+
+test("the resolved-service boundary accepts only the exact shipped configuration", async () => {
+  const config = await resolvedServiceConfigFixture();
+  assert.doesNotThrow(() =>
+    assertResolvedServiceConfig(config, "game-dev", false),
+  );
+});
+
+test("the resolved-service boundary refuses truthy substitutes for fs.strict", async () => {
+  for (const substitute of [1, "true", "false", {}, [], () => true, false]) {
+    const config = await resolvedServiceConfigFixture();
+    config.server.fs.strict = substitute;
+    assert.throws(
+      () => assertResolvedServiceConfig(config, "game-dev", false),
+      /VITE_SERVICE_CONFIGURATION_INVALID/u,
+      `fs.strict=${JSON.stringify(substitute) ?? String(substitute)} was accepted`,
+    );
+  }
+});
+
+test("the resolved-service boundary refuses truthy substitutes for strictPort", async () => {
+  for (const substitute of [1, "true", "false", {}, [], () => true, false]) {
+    const config = await resolvedServiceConfigFixture();
+    config.server.strictPort = substitute;
+    assert.throws(
+      () => assertResolvedServiceConfig(config, "game-dev", false),
+      /VITE_SERVICE_CONFIGURATION_INVALID/u,
+      `strictPort=${JSON.stringify(substitute) ?? String(substitute)} was accepted`,
+    );
+  }
+});
+
+test("the resolved-service boundary refuses a widened file or host surface", async () => {
+  const widenings = [
+    (config) => {
+      config.server.host = "0.0.0.0";
+    },
+    (config) => {
+      config.server.allowedHosts = true;
+    },
+    (config) => {
+      config.server.cors = true;
+    },
+    (config) => {
+      config.server.port = 5173;
+    },
+    (config) => {
+      config.server.fs.allow = [process.cwd(), "/"];
+    },
+    (config) => {
+      config.server.fs.deny = config.server.fs.deny.filter(
+        (pattern) => pattern !== "**/.git/**",
+      );
+    },
+    (config) => {
+      config.server.watch.ignored = [];
+    },
+    (config) => {
+      config.server.headers = { "X-BTT-Service-Id": "production-preview" };
+    },
+    (config) => {
+      config.root = "/";
+    },
+  ];
+  for (const widen of widenings) {
+    const config = await resolvedServiceConfigFixture();
+    widen(config);
+    assert.throws(
+      () => assertResolvedServiceConfig(config, "game-dev", false),
+      /VITE_SERVICE_CONFIGURATION_INVALID/u,
+    );
+  }
+});
+
+test("the resolved-service boundary refuses a preview/serve identity mismatch", async () => {
+  const config = await resolvedServiceConfigFixture();
+  assert.throws(
+    () => assertResolvedServiceConfig(config, "game-dev", true),
+    /VITE_SERVICE_MODE_MISMATCH/u,
+  );
 });
 
 test("Vite fails closed on unreviewed project-prefixed browser values", () => {

@@ -1,0 +1,1418 @@
+{
+  "schemaVersion": "btt.verify-all.evidence/v1",
+  "claimId": "tier-0.verify-all",
+  "runId": "20260810T152632.603Z-2b1f1df77a07",
+  "producer": {
+    "command": "npm run verify-all",
+    "script": "scripts/verify-all.mjs",
+    "executionMode": "canonical-real-processes",
+    "canonicalClaimEligible": true
+  },
+  "source": {
+    "commit": "a1ae0d6a92f73d07bf0155024677d944c79886b2",
+    "releaseTag": null,
+    "releaseTags": [],
+    "cleanStart": {
+      "clean": true,
+      "statusEntryCount": 0,
+      "statusOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headTree": "112e3ebd4aa3d15a3681de7d782657011c7cc1b9",
+      "indexMatchesHead": true,
+      "proofCommandIds": [
+        "meta_git_commit",
+        "meta_git_head_tree",
+        "meta_git_index_matches_head",
+        "meta_git_status"
+      ]
+    },
+    "endStateProof": {
+      "commit": "a1ae0d6a92f73d07bf0155024677d944c79886b2",
+      "headTree": "112e3ebd4aa3d15a3681de7d782657011c7cc1b9",
+      "indexMatchesHead": true,
+      "inputAggregateSha256": "15ac5d279c76e01c8557d4244f3f41d38048d4471aede4c90a9ebbd2336f7d61",
+      "releaseTagsStable": true,
+      "stable": true
+    }
+  },
+  "inputs": {
+    "algorithm": "sha256",
+    "discovery": {
+      "commandId": "meta_git_inputs",
+      "trackedAndUntrackedNonIgnored": true,
+      "excludedGeneratedCount": 0,
+      "rejectedPathDigests": []
+    },
+    "files": [
+      {
+        "path": ".editorconfig",
+        "type": "file",
+        "bytes": 188,
+        "sha256": "a6b98ea7cb6d61ed8d430dd0dffa46c87012b5cf859d4ce7207898954951fdcd"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "type": "file",
+        "bytes": 1496,
+        "sha256": "64d7ca00aa79ae5f51087e27378c53b4279ac4456c85f7e4a637170252b28a0e"
+      },
+      {
+        "path": ".gitignore",
+        "type": "file",
+        "bytes": 69,
+        "sha256": "e3458168fc74dfef3d5217c43d77f2ebd5fe2567ef72ea320d171450210499f3"
+      },
+      {
+        "path": ".npmrc",
+        "type": "file",
+        "bytes": 104,
+        "sha256": "24eb72778f1169ab08d9359f85fca9fb36004aa77efb7bb31f334cf5a3c33061"
+      },
+      {
+        "path": ".nvmrc",
+        "type": "file",
+        "bytes": 8,
+        "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+      },
+      {
+        "path": ".prettierignore",
+        "type": "file",
+        "bytes": 201,
+        "sha256": "8aedb665dfeb853eb050ec7910c69d6eca3bbe4dd2b5e16ee28763409645a50d"
+      },
+      {
+        "path": ".prettierrc.json",
+        "type": "file",
+        "bytes": 71,
+        "sha256": "a5d3ef194215138807adc3751108081be370ac67c130014fa281419ff4b16e2c"
+      },
+      {
+        "path": "AGENTS.md",
+        "type": "file",
+        "bytes": 17324,
+        "sha256": "8b93202fa5717386b06961e97a3eed8fccf715799c845abf3044f54d1c77626d"
+      },
+      {
+        "path": "ASSUMPTIONS.md",
+        "type": "file",
+        "bytes": 11993,
+        "sha256": "f0ced1f2ada4a4e889ccd816c88e939acc1835adfe4ffb1c2a5561e01733d8eb"
+      },
+      {
+        "path": "BLOCKED.md",
+        "type": "file",
+        "bytes": 937,
+        "sha256": "b102c01f23da9311a5b4b088e405474317d5dcaf939024c791b7b237a76320ee"
+      },
+      {
+        "path": "GOAL.md",
+        "type": "file",
+        "bytes": 65988,
+        "sha256": "ebe7ec637efbfaa16cbb1edb9123453c89ffbfa3d23b08caa30f3ea39debe268"
+      },
+      {
+        "path": "HACKATHON.md",
+        "type": "file",
+        "bytes": 4694,
+        "sha256": "7aba998bfc5577f6eb4192eba492c7973d82fce0421b4b58aaa2750b21d00a97"
+      },
+      {
+        "path": "Makefile",
+        "type": "file",
+        "bytes": 787,
+        "sha256": "04d7b5aa8c88a73900820d4a66736fcfb6df3760b529c26b61e57fda286ff1f0"
+      },
+      {
+        "path": "PROGRESS.md",
+        "type": "file",
+        "bytes": 15622,
+        "sha256": "1f818818c73e71e2bafd51b1a47aeaad226d9ae9f0cdc23ba39797dc2c4a289f"
+      },
+      {
+        "path": "README.md",
+        "type": "file",
+        "bytes": 15624,
+        "sha256": "3e885b6249e32053a5f26ded147f193956699460ee332411b725352af0d6df65"
+      },
+      {
+        "path": "SUPPORT_MATRIX.md",
+        "type": "file",
+        "bytes": 10355,
+        "sha256": "5a529c093a1f76639f3c49e6e3d445b8d1f49eba711e707c8d36b8f3c6aa94fd"
+      },
+      {
+        "path": "WINNING_IDEA.md",
+        "type": "file",
+        "bytes": 22200,
+        "sha256": "16e49b60b49513cf2e0b228caf90b277b3feec301a9e10b30dcf993946a7fbec"
+      },
+      {
+        "path": "adr/0001-toolchain-and-architecture.md",
+        "type": "file",
+        "bytes": 17371,
+        "sha256": "b41e758121ac22190041e764883687e2d39d2d81e49de64aa43df6ef9a393d41"
+      },
+      {
+        "path": "adr/0002-fail-closed-development-port-allocation.md",
+        "type": "file",
+        "bytes": 5941,
+        "sha256": "81b6eada1ffc67e664a7ff1fc6023bd686ec8f16536f2b6f5e18025c11b4c062"
+      },
+      {
+        "path": "coverage-policy.json",
+        "type": "file",
+        "bytes": 479,
+        "sha256": "e837fe4b59ba60bfb372a98661104f0e33545985397105f785bf494e77a372f3"
+      },
+      {
+        "path": "docs/boundaries.md",
+        "type": "file",
+        "bytes": 4710,
+        "sha256": "dc6ba330aa37806e5c01e30ac93b0c95a9185198b0ec04d0b3c5c6f981e2c4f6"
+      },
+      {
+        "path": "docs/dependencies.md",
+        "type": "file",
+        "bytes": 17563,
+        "sha256": "823d8f628e3ef15a4462bed76bf6ecd7163a9f3cbf809ca41b4584cf16c48afb"
+      },
+      {
+        "path": "docs/threat-model-tier0-local-services.md",
+        "type": "file",
+        "bytes": 10440,
+        "sha256": "a233faa26e9d70048c232fb3e427866df5653e6742332aec6ec1a86161ef54f8"
+      },
+      {
+        "path": "eslint.config.mjs",
+        "type": "file",
+        "bytes": 2016,
+        "sha256": "5e077070b61ad6c24afc41d406a7129ebd5a241be777f17d25f818b6f953fd87"
+      },
+      {
+        "path": "evidence/README.md",
+        "type": "file",
+        "bytes": 11464,
+        "sha256": "48cb5e0e128aeca85898a51436d78d27180421b42589eb68fb59fea04c766614"
+      },
+      {
+        "path": "index.html",
+        "type": "file",
+        "bytes": 522,
+        "sha256": "d243e6baa3669e45da337e71c3700c46c91c651bf621ca9834e0a5cd53a1e215"
+      },
+      {
+        "path": "package-lock.json",
+        "type": "file",
+        "bytes": 100149,
+        "sha256": "0df012b587138a9a86a6c4b84b1ee936503662d554addb8f090aa0a6d8169d89"
+      },
+      {
+        "path": "package.json",
+        "type": "file",
+        "bytes": 3038,
+        "sha256": "03fdd1787e465a5268af94b9b2a06c46d0f2547330904cf201ff5e384e841a82"
+      },
+      {
+        "path": "playwright.config.ts",
+        "type": "file",
+        "bytes": 3294,
+        "sha256": "6b30cd864a4e7a2212214c988da1c2955c61b652e77724e02da8ec81691eb83e"
+      },
+      {
+        "path": "ports.env",
+        "type": "file",
+        "bytes": 367,
+        "sha256": "7374f137e882b0106722dd75b97592473766d16084bd5a4b344e4b4ff5c07993"
+      },
+      {
+        "path": "scripts/bootstrap.mjs",
+        "type": "file",
+        "bytes": 10963,
+        "sha256": "f990dda90645e523a5cb6e717a8b0a11fd232a520d3eb7e54a04c0872d4545ba"
+      },
+      {
+        "path": "scripts/check-boundaries.mjs",
+        "type": "file",
+        "bytes": 32445,
+        "sha256": "90b6017d52f3a759f3f93474322c67d74f14ed8c6312d79fe961959d5224298c"
+      },
+      {
+        "path": "scripts/check-coverage.mjs",
+        "type": "file",
+        "bytes": 7633,
+        "sha256": "a49a83c3998bd94314b3a8aea3d34c7250963d3df8d8e9e0904eabb014d115fd"
+      },
+      {
+        "path": "scripts/check-local-state.mjs",
+        "type": "file",
+        "bytes": 7813,
+        "sha256": "8eb320c9ad33e06a1f40df443927b39342ddd6e2f5d24cf06e1653dce962166f"
+      },
+      {
+        "path": "scripts/clean.mjs",
+        "type": "file",
+        "bytes": 620,
+        "sha256": "ba4cafda52d15d809bc6d3784f3824e2b13880b9fbdf8d9e558f955f663708d0"
+      },
+      {
+        "path": "scripts/dev-process-cwd.c",
+        "type": "file",
+        "bytes": 657,
+        "sha256": "582dbaf348e1ff745666bdf49d7d50d9c7dd0eed1780cef4a8e65b31be4fb9a0"
+      },
+      {
+        "path": "scripts/dev-service-runtime.mjs",
+        "type": "file",
+        "bytes": 35960,
+        "sha256": "19f5ad032ccd3bbe6c56378e277d9a50d3ecae61779dcfd70690fe4b283d41f7"
+      },
+      {
+        "path": "scripts/dev-service-supervisor.mjs",
+        "type": "file",
+        "bytes": 10751,
+        "sha256": "a30415782623f750c0bdcd3aecff6bdb294749be28d7798984408e61c5684fe8"
+      },
+      {
+        "path": "scripts/dev-services.mjs",
+        "type": "file",
+        "bytes": 40398,
+        "sha256": "91dde6626f5dd27061eaed2f58e23d3f9eb9b04f70c9ca933d2417f4138159de"
+      },
+      {
+        "path": "scripts/dev-socket-listeners.c",
+        "type": "file",
+        "bytes": 3840,
+        "sha256": "8a1ec3dbc9aeb52ad34860aaab50b58b1dc733a95ed89b245acd17a1f8f95f1f"
+      },
+      {
+        "path": "scripts/owned-process-runner.mjs",
+        "type": "file",
+        "bytes": 34063,
+        "sha256": "790fd532a002b44b5930784471cbf44db6822e029e68bd87e6fd7ce771bf725d"
+      },
+      {
+        "path": "scripts/owned-process-snapshot.c",
+        "type": "file",
+        "bytes": 5021,
+        "sha256": "fe457b715cf8dd92424fcd51475104e71abb5a79e5e54ec3a66fafae0b6f6886"
+      },
+      {
+        "path": "scripts/playwright-runner.mjs",
+        "type": "file",
+        "bytes": 4810,
+        "sha256": "42d5719afa4076c89d6127dc789351536e45b200a89ef25433db625149e60c02"
+      },
+      {
+        "path": "scripts/playwright-target.mjs",
+        "type": "file",
+        "bytes": 2070,
+        "sha256": "ec8826dcefce350f8bf21bf5caeec598534f9e3429964c05bcb483b130ba2db5"
+      },
+      {
+        "path": "scripts/safe-environment.mjs",
+        "type": "file",
+        "bytes": 2559,
+        "sha256": "83f33ed54fd7641660d8c04e129ed8123a5ad9b8a9971f2af13ea0f0a030e185"
+      },
+      {
+        "path": "scripts/static-server.mjs",
+        "type": "file",
+        "bytes": 19573,
+        "sha256": "6e799d55e5cdd4f6b6f3873a748c8a946126d91c2f27d03be7eb05d60b9112b2"
+      },
+      {
+        "path": "scripts/trusted-tooling.mjs",
+        "type": "file",
+        "bytes": 2742,
+        "sha256": "133ce05da995e5bf5266d1da09b267ebb0c7d940cb2a57012594130ebd06aa63"
+      },
+      {
+        "path": "scripts/verify-all.mjs",
+        "type": "file",
+        "bytes": 87170,
+        "sha256": "f4c076540ce1714a503fc2dc965166ee0869567e77cc1d49446a71bbe0e320be"
+      },
+      {
+        "path": "scripts/vite-service.mjs",
+        "type": "file",
+        "bytes": 4226,
+        "sha256": "b0d42771cbb80c2f8af429ce8b8dc1f1cf0dd030218431137153618e0f9ebfc7"
+      },
+      {
+        "path": "src/build-status.ts",
+        "type": "file",
+        "bytes": 419,
+        "sha256": "1e99b5ba511adc8aa1ebac61084cc381ab337deb138350499735d812786837aa"
+      },
+      {
+        "path": "src/foundation-view.ts",
+        "type": "file",
+        "bytes": 826,
+        "sha256": "0c2655c5d8e9f2bf3342d530041d27cd8b504bdc976b33fab73bac7fda331495"
+      },
+      {
+        "path": "src/main.ts",
+        "type": "file",
+        "bytes": 237,
+        "sha256": "40b55d2c366d22ffbbc965257e4642a5406d14654a98caef04b1878cb0066910"
+      },
+      {
+        "path": "src/styles.css",
+        "type": "file",
+        "bytes": 1974,
+        "sha256": "3514aa50067fafd97b61b813642f353fd05ece9a5351b8e3e5086cd529370cd6"
+      },
+      {
+        "path": "tests/e2e/foundation.spec.ts",
+        "type": "file",
+        "bytes": 1267,
+        "sha256": "bd0c3de7079509c74b992df90cd8d7e80af1bf07198403fe1fe66cd573b7b95a"
+      },
+      {
+        "path": "tests/tooling/bootstrap.test.mjs",
+        "type": "file",
+        "bytes": 5009,
+        "sha256": "a9d076e418912bf8547b88d2a5c885f1dfa151b21b1d20cc2cd9d822794e8aa0"
+      },
+      {
+        "path": "tests/tooling/check-boundaries.test.mjs",
+        "type": "file",
+        "bytes": 13150,
+        "sha256": "92657fdd466eed429a9ca2951bb5d3374bd109339d291a73e0fa3641b6fba010"
+      },
+      {
+        "path": "tests/tooling/check-coverage.test.mjs",
+        "type": "file",
+        "bytes": 3668,
+        "sha256": "681fb4a4940affe47190009f266dd7538d335cc6c08d085f80f2fcaec4033dc5"
+      },
+      {
+        "path": "tests/tooling/check-local-state.test.mjs",
+        "type": "file",
+        "bytes": 4158,
+        "sha256": "d24f38a9dee6983607ad4cf5c8901b62360726929b3d62605a1b8b72207acd6b"
+      },
+      {
+        "path": "tests/tooling/ci-policy.test.mjs",
+        "type": "file",
+        "bytes": 1316,
+        "sha256": "29423b5b1249f4fa4d5b507500713a94e69fbe71e79fbac33182ee634480c007"
+      },
+      {
+        "path": "tests/tooling/config-environment.test.mjs",
+        "type": "file",
+        "bytes": 3102,
+        "sha256": "bb8e76797239fccf9b2f7906a650b849ac350f015160d0402b12bdd19d927e7e"
+      },
+      {
+        "path": "tests/tooling/dev-services.test.mjs",
+        "type": "file",
+        "bytes": 27213,
+        "sha256": "edce4df0e88ce5d76e052b722da12c5d6956992da211b2b5c2bb39595f40319b"
+      },
+      {
+        "path": "tests/tooling/npm-install-policy.test.mjs",
+        "type": "file",
+        "bytes": 2276,
+        "sha256": "a8386df82de0208280c0a0d2111f294a4ef197efe7f48b92f583dfc5942a3825"
+      },
+      {
+        "path": "tests/tooling/owned-process-runner.test.mjs",
+        "type": "file",
+        "bytes": 6158,
+        "sha256": "d0c39f82118b6f0fc0cca7708d8b7308fa9a1dad475651698b54f844aa883d95"
+      },
+      {
+        "path": "tests/tooling/safe-environment.test.mjs",
+        "type": "file",
+        "bytes": 2239,
+        "sha256": "54fbd20a430dbbde39472d1d6ef4b4af2fa075dd8cd7333ae1cf458a515fa1fd"
+      },
+      {
+        "path": "tests/tooling/tsconfig-isolation.test.mjs",
+        "type": "file",
+        "bytes": 4085,
+        "sha256": "ff581bd70fb6407f9973af5639032d10d16b1daea0377773679dd6b77476962c"
+      },
+      {
+        "path": "tests/tooling/verify-all.test.mjs",
+        "type": "file",
+        "bytes": 33510,
+        "sha256": "385cdf488af4296326244a4ecf53d215379b51b6186ceb4610125806bfff48bb"
+      },
+      {
+        "path": "tests/tooling/vite-service.test.mjs",
+        "type": "file",
+        "bytes": 2665,
+        "sha256": "b034fae4593d32b12e384782a13f61c81f2f1c47e60d3bd6ab74187c4a33cb33"
+      },
+      {
+        "path": "tests/unit/foundation.test.ts",
+        "type": "file",
+        "bytes": 1055,
+        "sha256": "a2ef5b5ee63a57eff8aca903bf97e4321a0a2622fb0e61cd3f301d7b7b3cf98e"
+      },
+      {
+        "path": "tsconfig.app.json",
+        "type": "file",
+        "bytes": 683,
+        "sha256": "982dd7232938e498dc2c4d688387771ea8ec0724c992ee4a9f76a9d16ab09c70"
+      },
+      {
+        "path": "tsconfig.base.json",
+        "type": "file",
+        "bytes": 663,
+        "sha256": "cf998f82e5af5e240f9bf3110c8d1b023dea71c69e9d90aa3d815c97a7bcdb18"
+      },
+      {
+        "path": "tsconfig.domain.json",
+        "type": "file",
+        "bytes": 592,
+        "sha256": "f2e5dbcb47f8f4e89d7573c72c0150ed8ce82f5b6e1ab0ff20c7b23e48edeff9"
+      },
+      {
+        "path": "tsconfig.e2e.json",
+        "type": "file",
+        "bytes": 388,
+        "sha256": "65c0183c57c549cac0781eafd9421ff433b746ff25b0b3c83fe5adc1fb3e32c2"
+      },
+      {
+        "path": "tsconfig.json",
+        "type": "file",
+        "bytes": 240,
+        "sha256": "3fa9df0238834c741b5319d2b7ae5dbbf7a84b93e4d28bf113095d23b7be18af"
+      },
+      {
+        "path": "tsconfig.node.json",
+        "type": "file",
+        "bytes": 317,
+        "sha256": "ca45d65fe9b43307296ef9c83f7bbc400a4246e14a61508d537e614b3613ceab"
+      },
+      {
+        "path": "tsconfig.test.json",
+        "type": "file",
+        "bytes": 455,
+        "sha256": "82185191ba8d5cc63d58f895edf958097fe0ac7233364508a05ed2564d9b9a1e"
+      },
+      {
+        "path": "vite.config.ts",
+        "type": "file",
+        "bytes": 5635,
+        "sha256": "cf5d47420f8c38738ec51dedcaa2a7b4c06758362bd944fb996d3001840d7601"
+      },
+      {
+        "path": "vitest.config.ts",
+        "type": "file",
+        "bytes": 534,
+        "sha256": "4be2534a8e00be4699e5fd5464f19b5bf475f9135d805160ad87f513c1f3696e"
+      }
+    ],
+    "aggregateSha256": "15ac5d279c76e01c8557d4244f3f41d38048d4471aede4c90a9ebbd2336f7d61",
+    "complete": true
+  },
+  "reproducibilityBindings": {
+    "lockfile": {
+      "path": "package-lock.json",
+      "bytes": 100149,
+      "sha256": "0df012b587138a9a86a6c4b84b1ee936503662d554addb8f090aa0a6d8169d89"
+    },
+    "configurations": [
+      {
+        "path": ".editorconfig",
+        "bytes": 188,
+        "sha256": "a6b98ea7cb6d61ed8d430dd0dffa46c87012b5cf859d4ce7207898954951fdcd"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "bytes": 1496,
+        "sha256": "64d7ca00aa79ae5f51087e27378c53b4279ac4456c85f7e4a637170252b28a0e"
+      },
+      {
+        "path": ".gitignore",
+        "bytes": 69,
+        "sha256": "e3458168fc74dfef3d5217c43d77f2ebd5fe2567ef72ea320d171450210499f3"
+      },
+      {
+        "path": ".npmrc",
+        "bytes": 104,
+        "sha256": "24eb72778f1169ab08d9359f85fca9fb36004aa77efb7bb31f334cf5a3c33061"
+      },
+      {
+        "path": ".nvmrc",
+        "bytes": 8,
+        "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+      },
+      {
+        "path": ".prettierignore",
+        "bytes": 201,
+        "sha256": "8aedb665dfeb853eb050ec7910c69d6eca3bbe4dd2b5e16ee28763409645a50d"
+      },
+      {
+        "path": ".prettierrc.json",
+        "bytes": 71,
+        "sha256": "a5d3ef194215138807adc3751108081be370ac67c130014fa281419ff4b16e2c"
+      },
+      {
+        "path": "Makefile",
+        "bytes": 787,
+        "sha256": "04d7b5aa8c88a73900820d4a66736fcfb6df3760b529c26b61e57fda286ff1f0"
+      },
+      {
+        "path": "coverage-policy.json",
+        "bytes": 479,
+        "sha256": "e837fe4b59ba60bfb372a98661104f0e33545985397105f785bf494e77a372f3"
+      },
+      {
+        "path": "eslint.config.mjs",
+        "bytes": 2016,
+        "sha256": "5e077070b61ad6c24afc41d406a7129ebd5a241be777f17d25f818b6f953fd87"
+      },
+      {
+        "path": "package.json",
+        "bytes": 3038,
+        "sha256": "03fdd1787e465a5268af94b9b2a06c46d0f2547330904cf201ff5e384e841a82"
+      },
+      {
+        "path": "playwright.config.ts",
+        "bytes": 3294,
+        "sha256": "6b30cd864a4e7a2212214c988da1c2955c61b652e77724e02da8ec81691eb83e"
+      },
+      {
+        "path": "ports.env",
+        "bytes": 367,
+        "sha256": "7374f137e882b0106722dd75b97592473766d16084bd5a4b344e4b4ff5c07993"
+      },
+      {
+        "path": "tsconfig.app.json",
+        "bytes": 683,
+        "sha256": "982dd7232938e498dc2c4d688387771ea8ec0724c992ee4a9f76a9d16ab09c70"
+      },
+      {
+        "path": "tsconfig.base.json",
+        "bytes": 663,
+        "sha256": "cf998f82e5af5e240f9bf3110c8d1b023dea71c69e9d90aa3d815c97a7bcdb18"
+      },
+      {
+        "path": "tsconfig.domain.json",
+        "bytes": 592,
+        "sha256": "f2e5dbcb47f8f4e89d7573c72c0150ed8ce82f5b6e1ab0ff20c7b23e48edeff9"
+      },
+      {
+        "path": "tsconfig.e2e.json",
+        "bytes": 388,
+        "sha256": "65c0183c57c549cac0781eafd9421ff433b746ff25b0b3c83fe5adc1fb3e32c2"
+      },
+      {
+        "path": "tsconfig.json",
+        "bytes": 240,
+        "sha256": "3fa9df0238834c741b5319d2b7ae5dbbf7a84b93e4d28bf113095d23b7be18af"
+      },
+      {
+        "path": "tsconfig.node.json",
+        "bytes": 317,
+        "sha256": "ca45d65fe9b43307296ef9c83f7bbc400a4246e14a61508d537e614b3613ceab"
+      },
+      {
+        "path": "tsconfig.test.json",
+        "bytes": 455,
+        "sha256": "82185191ba8d5cc63d58f895edf958097fe0ac7233364508a05ed2564d9b9a1e"
+      },
+      {
+        "path": "vite.config.ts",
+        "bytes": 5635,
+        "sha256": "cf5d47420f8c38738ec51dedcaa2a7b4c06758362bd944fb996d3001840d7601"
+      },
+      {
+        "path": "vitest.config.ts",
+        "bytes": 534,
+        "sha256": "4be2534a8e00be4699e5fd5464f19b5bf475f9135d805160ad87f513c1f3696e"
+      }
+    ],
+    "aggregateSha256": "d67f947abaf676b641a4a90eaa17eb7529128bae949d8a3bd1829be2d1046c08",
+    "complete": true
+  },
+  "buildOutput": null,
+  "preliminaryBuildOutput": {
+    "root": "dist/",
+    "algorithm": "sha256",
+    "files": [
+      {
+        "path": ".vite/manifest.json",
+        "bytes": 185,
+        "sha256": "707f6c5e226938f67c9d2d5a382cf6b54e829d9bd1507f1f8381d70a07aa9af3"
+      },
+      {
+        "path": "assets/index--lufYNZ8.css",
+        "bytes": 1530,
+        "sha256": "42ae98f7b0efebb01f31099245cfc75750cdc9e34dfca1c91c1ee39d870ac509"
+      },
+      {
+        "path": "assets/index-BaXiQVQw.js",
+        "bytes": 1479,
+        "sha256": "f20210365bcc9c3af10550c818f0b68da786a1948ebba387b49e08b0685656ae"
+      },
+      {
+        "path": "assets/index-BaXiQVQw.js.map",
+        "bytes": 2002,
+        "sha256": "834b9188d690902dddbada0b3de38968e561da916f78e6588142b35d22625f5a"
+      },
+      {
+        "path": "index.html",
+        "bytes": 621,
+        "sha256": "8ad3eca61dd680f081c2294c8366670fe151dd7ef6b3ef355289d01b8d3bdcd4"
+      }
+    ],
+    "aggregateSha256": "da47f5d10feb80c83265ab636cf1b28f965e0ee1fb8ead9c953fcfd291a9851b",
+    "complete": true
+  },
+  "randomness": {
+    "status": "applicable",
+    "runIdentifier": {
+      "source": "node:crypto.randomBytes",
+      "entropyBytes": 6,
+      "encodedInRunId": true
+    },
+    "reason": "Run identifiers use randomness; randomized child suites separately own and emit their seeds and case counts in ordered command evidence."
+  },
+  "startedAtUtc": "2026-08-10T15:26:32.603Z",
+  "endedAtUtc": "2026-08-10T15:26:56.027Z",
+  "durationMs": 23424,
+  "monotonicDurationMs": 28706,
+  "system": {
+    "platform": "darwin",
+    "osType": "Darwin",
+    "osRelease": "27.0.0",
+    "osVersion": "Darwin Kernel Version 27.0.0: Tue Jul 14 21:42:16 PDT 2026; root:xnu-13432.0.94.501.4~1/RELEASE_ARM64_T6031",
+    "architecture": "arm64",
+    "node": "v24.19.0",
+    "npm": "11.17.0",
+    "playwright": {
+      "testPackageVersion": "1.62.1",
+      "runtimePackageVersion": "1.62.1",
+      "browsers": null,
+      "endProbeBrowsers": null,
+      "browserIntegrityStable": false
+    }
+  },
+  "requiredRuntime": {
+    "node": "v24.19.0",
+    "npm": "11.17.0",
+    "exactMatchRequired": true
+  },
+  "toolIntegrity": {
+    "algorithm": "sha256",
+    "start": {
+      "node": {
+        "bytes": 121306800,
+        "sha256": "27db838bb204ef7c21df2931f5656e4c8fb32e6e947f363a402b49714d32b5b1"
+      },
+      "npmCli": {
+        "bytes": 54,
+        "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+      },
+      "npmInstallationTree": {
+        "fileCount": 1921,
+        "totalBytes": 12079734,
+        "aggregateSha256": "599a528a469138f74c2952d3d678f26f947c42bbb38505a02201f30ee250adaa",
+        "excludedGeneratedRoots": []
+      },
+      "git": {
+        "bytes": 118640,
+        "sha256": "ffdb53736fc808e793863887f2dba66c49d68f6aa0b43db5caa0fd8b1ec11aef"
+      },
+      "localEntrypoints": {
+        "axePlaywright": {
+          "bytes": 9644,
+          "sha256": "2aa36f4a8f726f9a50f159ccf18babf5a80f505b2a73770053cf132ed9724922"
+        },
+        "eslint": {
+          "bytes": 6028,
+          "sha256": "bb07a179294caee1175397035fef38347782cb8fbf00356ca8c6fd2c87a989fa"
+        },
+        "playwright": {
+          "bytes": 707,
+          "sha256": "79e23e6a249176295b8490567daa7717448a75866d6ea6f6b296ff3d23305c69"
+        },
+        "prettier": {
+          "bytes": 2628,
+          "sha256": "6e922134a3c76fd4de202959bb6aef50bde0c994148075003a15569b7197906e"
+        },
+        "tsc": {
+          "bytes": 45,
+          "sha256": "8d5fa5bd883fec0979fc2004f1fe1d99aef40570155d550eadc0b03b55513bf0"
+        },
+        "vite": {
+          "bytes": 2574,
+          "sha256": "fa03478846d229651a3c6aa64833ba2c6cbf580a798b92bd8f47c7480bafb5d8"
+        },
+        "vitest": {
+          "bytes": 43,
+          "sha256": "39db22f579acf5639bbb17a261408debbde03f4692c0c439e77e7f13aeba74d6"
+        }
+      },
+      "installedDependencyTree": {
+        "fileCount": 8560,
+        "totalBytes": 198572548,
+        "aggregateSha256": "9d7549646f4729a7335fb708fb982853d197be1f041c914dbc30e791941e05c6",
+        "excludedGeneratedRoots": [".cache", ".vite", ".vite-temp"]
+      }
+    },
+    "startAggregateSha256": "f4eae94e8a249ad0b8d6b5c66f8208aab76233830929ed093e1c84b7b298caea",
+    "endAggregateSha256": "f4eae94e8a249ad0b8d6b5c66f8208aab76233830929ed093e1c84b7b298caea",
+    "stable": true
+  },
+  "ports": {
+    "source": "ports.env",
+    "host": "127.0.0.1",
+    "assigned": [
+      { "service": "game-dev", "port": 4140 },
+      { "service": "production-preview", "port": 4141 },
+      { "service": "browser-history-e2e", "port": 4142 },
+      { "service": "static-bundle", "port": 4143 }
+    ],
+    "reservedBlock": [
+      4140, 4141, 4142, 4143, 4144, 4145, 4146, 4147, 4148, 4149
+    ],
+    "duplicateKeys": [],
+    "unexpectedKeys": [],
+    "invalidLineDigests": [],
+    "valid": true
+  },
+  "serviceReuse": {
+    "allFourValidatedOwnedBeforeReuse": false,
+    "validationCommandId": "dev_health",
+    "lifecycleSchemaVersion": "btt.dev-lifecycle/v1",
+    "up": null,
+    "health": null,
+    "down": null,
+    "reuseEnvironmentKey": "BTT_REUSE_OWNED_E2E_SERVER",
+    "targets": [
+      {
+        "target": "e2e",
+        "serviceId": "browser-history-e2e",
+        "port": 4142,
+        "browsers": ["chromium", "firefox", "webkit"],
+        "commandId": "e2e_4142_all_browsers"
+      },
+      {
+        "target": "preview",
+        "serviceId": "production-preview",
+        "port": 4141,
+        "browsers": ["chromium"],
+        "commandId": "e2e_preview_4141_chromium"
+      },
+      {
+        "target": "static",
+        "serviceId": "static-bundle",
+        "port": 4143,
+        "browsers": ["chromium"],
+        "commandId": "e2e_static_4143_chromium"
+      }
+    ]
+  },
+  "commandPolicy": {
+    "timeoutMs": 240000,
+    "totalTimeoutMs": 2880000,
+    "outputLimitBytes": 67108864,
+    "childEnvironment": "allowlisted",
+    "timeoutTerminationScope": "dedicated-posix-process-group",
+    "recordedEnvironmentValues": false,
+    "passthroughNames": [
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_EXTRA_CA_CERTS",
+      "NO_PROXY",
+      "SSL_CERT_DIR",
+      "SSL_CERT_FILE",
+      "TZ",
+      "http_proxy",
+      "https_proxy",
+      "no_proxy",
+      "HTTP_PROXY",
+      "HTTPS_PROXY"
+    ],
+    "pathSource": "trusted-node-directory-plus-fixed-system-directories"
+  },
+  "commands": [
+    {
+      "id": "meta_git_commit",
+      "label": "git rev-parse --verify HEAD",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["rev-parse", "--verify", "HEAD"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.605Z",
+      "endedAtUtc": "2026-08-10T15:26:32.783Z",
+      "durationMs": 178,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 41,
+      "redactedStdoutSha256": "bd6f1031dbc4fa9a597d953bbab22efe827fa993799055b1fc9b5c1bc80c580a",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "bd6f1031dbc4fa9a597d953bbab22efe827fa993799055b1fc9b5c1bc80c580a",
+      "eventSequence": { "first": 2, "last": 4 }
+    },
+    {
+      "id": "meta_git_head_tree",
+      "label": "git rev-parse --verify HEAD^{tree}",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["rev-parse", "--verify", "HEAD^{tree}"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.783Z",
+      "endedAtUtc": "2026-08-10T15:26:32.816Z",
+      "durationMs": 33,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 41,
+      "redactedStdoutSha256": "32f5010dad726751636358b6500f3b28cc1c58505666c44e25c5e1705df7ad92",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "32f5010dad726751636358b6500f3b28cc1c58505666c44e25c5e1705df7ad92",
+      "eventSequence": { "first": 5, "last": 7 }
+    },
+    {
+      "id": "meta_git_index_matches_head",
+      "label": "git diff-index --cached --quiet HEAD --",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["diff-index", "--cached", "--quiet", "HEAD", "--"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.816Z",
+      "endedAtUtc": "2026-08-10T15:26:32.847Z",
+      "durationMs": 31,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 0,
+      "redactedStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventSequence": { "first": 8, "last": 9 }
+    },
+    {
+      "id": "meta_git_status",
+      "label": "git status --porcelain=v1 --untracked-files=all -z",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["status", "--porcelain=v1", "--untracked-files=all", "-z"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.847Z",
+      "endedAtUtc": "2026-08-10T15:26:32.897Z",
+      "durationMs": 50,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 0,
+      "redactedStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventSequence": { "first": 10, "last": 11 }
+    },
+    {
+      "id": "meta_git_inputs",
+      "label": "git ls-files --cached --others --exclude-standard -z -- .",
+      "kind": "metadata",
+      "command": "git",
+      "args": [
+        "ls-files",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+        "-z",
+        "--",
+        "."
+      ],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.897Z",
+      "endedAtUtc": "2026-08-10T15:26:32.944Z",
+      "durationMs": 47,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 1845,
+      "redactedStdoutSha256": "93e51d51cdcfa3385ba43e8b1aa1d7cc544bf7f8d1d6908f2a536793b75a1a7b",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "93e51d51cdcfa3385ba43e8b1aa1d7cc544bf7f8d1d6908f2a536793b75a1a7b",
+      "eventSequence": { "first": 12, "last": 14 }
+    },
+    {
+      "id": "meta_git_tag",
+      "label": "git tag --points-at HEAD",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["tag", "--points-at", "HEAD"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:32.958Z",
+      "endedAtUtc": "2026-08-10T15:26:33.006Z",
+      "durationMs": 48,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 0,
+      "redactedStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventSequence": { "first": 15, "last": 16 }
+    },
+    {
+      "id": "meta_npm_version",
+      "label": "npm --version",
+      "kind": "metadata",
+      "command": "npm",
+      "args": ["--version"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:33.007Z",
+      "endedAtUtc": "2026-08-10T15:26:33.162Z",
+      "durationMs": 155,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 8,
+      "redactedStdoutSha256": "12e3b7d8516efaa9a1a2bf1a6a92265adcb85e01353fdc823db7191994102f81",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "12e3b7d8516efaa9a1a2bf1a6a92265adcb85e01353fdc823db7191994102f81",
+      "eventSequence": { "first": 17, "last": 19 }
+    },
+    {
+      "id": "meta_playwright_versions",
+      "label": "Playwright installed-browser version probe",
+      "kind": "metadata",
+      "command": "node",
+      "args": [
+        "--input-type=module",
+        "--eval",
+        "<embedded-probe:sha256:ceee435d2c19f062f1e32dfd3a21596df7c07f78a0fb31fe689b5c8f5813067d>"
+      ],
+      "environmentOverlayKeys": ["PLAYWRIGHT_BROWSERS_PATH"],
+      "startedAtUtc": "2026-08-10T15:26:33.162Z",
+      "endedAtUtc": "2026-08-10T15:26:35.517Z",
+      "durationMs": 2355,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 9,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 414,
+      "redactedStdoutSha256": "4d7955bba20b3f7a6f5c7cba7bfc33aea25d6a933a30701d002553f95718ecbb",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "4d7955bba20b3f7a6f5c7cba7bfc33aea25d6a933a30701d002553f95718ecbb",
+      "eventSequence": { "first": 20, "last": 22 }
+    },
+    {
+      "id": "check",
+      "label": "npm run check",
+      "kind": "verification",
+      "command": "npm",
+      "args": ["run", "check"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:35.517Z",
+      "endedAtUtc": "2026-08-10T15:26:39.138Z",
+      "durationMs": 3621,
+      "outcome": "FAIL",
+      "exitCode": 1,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 7,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 919,
+      "redactedStdoutSha256": "a760b6aeaff267ca59328f85f2441657576a6034a299f37c635c290f1a0ad7b8",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "a760b6aeaff267ca59328f85f2441657576a6034a299f37c635c290f1a0ad7b8",
+      "eventSequence": { "first": 23, "last": 32 }
+    },
+    {
+      "id": "test",
+      "label": "npm run test",
+      "kind": "verification",
+      "command": "npm",
+      "args": ["run", "test"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:39.139Z",
+      "endedAtUtc": "2026-08-10T15:26:46.039Z",
+      "durationMs": 6900,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 85,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 9733,
+      "redactedStdoutSha256": "6178abd53d911cece1d9fb766cc96d196721e3337b2b0766b274539da7d2b866",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "6178abd53d911cece1d9fb766cc96d196721e3337b2b0766b274539da7d2b866",
+      "eventSequence": { "first": 33, "last": 93 }
+    },
+    {
+      "id": "build",
+      "label": "npm run build",
+      "kind": "verification",
+      "command": "npm",
+      "args": ["run", "build"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:46.040Z",
+      "endedAtUtc": "2026-08-10T15:26:47.910Z",
+      "durationMs": 1870,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 7,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 881,
+      "redactedStdoutSha256": "79f503d9ec8b2bfd74565f7b0852fe3edf2bee22948ec527e44623f2e49b148e",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "79f503d9ec8b2bfd74565f7b0852fe3edf2bee22948ec527e44623f2e49b148e",
+      "eventSequence": { "first": 94, "last": 107 }
+    },
+    {
+      "id": "audit",
+      "label": "npm run security:audit",
+      "kind": "verification",
+      "command": "npm",
+      "args": ["run", "security:audit"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:47.913Z",
+      "endedAtUtc": "2026-08-10T15:26:48.839Z",
+      "durationMs": 926,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 1,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 109,
+      "redactedStdoutSha256": "56f8fb797f7b3af16e267ef96613272e513b985d552d3b0e9b04873e87d5b71d",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "56f8fb797f7b3af16e267ef96613272e513b985d552d3b0e9b04873e87d5b71d",
+      "eventSequence": { "first": 108, "last": 111 }
+    },
+    {
+      "id": "meta_git_commit_end",
+      "label": "git rev-parse --verify HEAD (end)",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["rev-parse", "--verify", "HEAD"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:48.839Z",
+      "endedAtUtc": "2026-08-10T15:26:48.885Z",
+      "durationMs": 46,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 41,
+      "redactedStdoutSha256": "bd6f1031dbc4fa9a597d953bbab22efe827fa993799055b1fc9b5c1bc80c580a",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "bd6f1031dbc4fa9a597d953bbab22efe827fa993799055b1fc9b5c1bc80c580a",
+      "eventSequence": { "first": 113, "last": 115 }
+    },
+    {
+      "id": "meta_git_head_tree_end",
+      "label": "git rev-parse --verify HEAD^{tree} (end)",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["rev-parse", "--verify", "HEAD^{tree}"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:48.886Z",
+      "endedAtUtc": "2026-08-10T15:26:48.913Z",
+      "durationMs": 27,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 41,
+      "redactedStdoutSha256": "32f5010dad726751636358b6500f3b28cc1c58505666c44e25c5e1705df7ad92",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "32f5010dad726751636358b6500f3b28cc1c58505666c44e25c5e1705df7ad92",
+      "eventSequence": { "first": 116, "last": 118 }
+    },
+    {
+      "id": "meta_git_index_matches_head_end",
+      "label": "git diff-index --cached --quiet HEAD -- (end)",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["diff-index", "--cached", "--quiet", "HEAD", "--"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:48.913Z",
+      "endedAtUtc": "2026-08-10T15:26:48.964Z",
+      "durationMs": 51,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 0,
+      "redactedStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventSequence": { "first": 119, "last": 120 }
+    },
+    {
+      "id": "meta_git_inputs_end",
+      "label": "git ls-files --cached --others --exclude-standard -z -- . (end)",
+      "kind": "metadata",
+      "command": "git",
+      "args": [
+        "ls-files",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+        "-z",
+        "--",
+        "."
+      ],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:48.965Z",
+      "endedAtUtc": "2026-08-10T15:26:48.999Z",
+      "durationMs": 34,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 1906,
+      "redactedStdoutSha256": "005688fd55aa066b78e87f1c946412938a580ff74ea6787046619b6056bf4ed5",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "005688fd55aa066b78e87f1c946412938a580ff74ea6787046619b6056bf4ed5",
+      "eventSequence": { "first": 121, "last": 123 }
+    },
+    {
+      "id": "meta_git_tag_end",
+      "label": "git tag --points-at HEAD (end)",
+      "kind": "metadata",
+      "command": "git",
+      "args": ["tag", "--points-at", "HEAD"],
+      "environmentOverlayKeys": [],
+      "startedAtUtc": "2026-08-10T15:26:48.999Z",
+      "endedAtUtc": "2026-08-10T15:26:49.051Z",
+      "durationMs": 52,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 0,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 0,
+      "redactedStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventSequence": { "first": 124, "last": 125 }
+    },
+    {
+      "id": "meta_playwright_versions_end",
+      "label": "Playwright installed-browser version probe (end)",
+      "kind": "metadata",
+      "command": "node",
+      "args": [
+        "--input-type=module",
+        "--eval",
+        "<embedded-probe:sha256:ceee435d2c19f062f1e32dfd3a21596df7c07f78a0fb31fe689b5c8f5813067d>"
+      ],
+      "environmentOverlayKeys": ["PLAYWRIGHT_BROWSERS_PATH"],
+      "startedAtUtc": "2026-08-10T15:26:49.051Z",
+      "endedAtUtc": "2026-08-10T15:26:51.669Z",
+      "durationMs": 2618,
+      "outcome": "PASS",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "aborted": false,
+      "outputLimitExceeded": false,
+      "terminationCause": null,
+      "forcedTermination": false,
+      "processTreeScope": "dedicated-posix-process-group-plus-exact-descendants",
+      "trackedDescendantCount": 10,
+      "descendantTrackingErrorCode": null,
+      "errorCode": null,
+      "observedOutputBytes": 414,
+      "redactedStdoutSha256": "4d7955bba20b3f7a6f5c7cba7bfc33aea25d6a933a30701d002553f95718ecbb",
+      "redactedStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactedOrderedOutputSha256": "4d7955bba20b3f7a6f5c7cba7bfc33aea25d6a933a30701d002553f95718ecbb",
+      "eventSequence": { "first": 126, "last": 128 }
+    }
+  ],
+  "skippedSteps": [
+    { "id": "dev_preflight", "reason": "earlier_verification_failure" },
+    { "id": "dev_up", "reason": "earlier_verification_failure" },
+    { "id": "dev_health", "reason": "earlier_verification_failure" },
+    { "id": "e2e_4142_all_browsers", "reason": "earlier_verification_failure" },
+    {
+      "id": "e2e_preview_4141_chromium",
+      "reason": "earlier_verification_failure"
+    },
+    {
+      "id": "e2e_static_4143_chromium",
+      "reason": "earlier_verification_failure"
+    }
+  ],
+  "cleanup": {
+    "attempted": false,
+    "commandId": null,
+    "expectedInvocationId": null,
+    "outcome": "NOT_NEEDED",
+    "reason": "verifier_did_not_start_services",
+    "evaluatedInFinally": true,
+    "devServiceOwnership": "not-started"
+  },
+  "interruption": {
+    "signal": null,
+    "requestedAtUtc": null,
+    "partialArtifactsFinalized": false,
+    "totalDeadlineExceeded": false
+  },
+  "redaction": {
+    "classification": "INTERNAL_REDACTED",
+    "environmentValuesRecorded": false,
+    "policy": "length-preserving exact-value and credential-pattern masking",
+    "reviewer": "unassigned",
+    "publicationStatus": "human-review-required"
+  },
+  "terminalOutcome": "FAIL",
+  "failureCodes": [
+    "PLAYWRIGHT_BROWSER_VERSIONS_UNAVAILABLE",
+    "COMMAND_FAILED:check",
+    "BROWSER_INTEGRITY_CHANGED_DURING_RUN"
+  ],
+  "artifacts": {
+    "events": {
+      "path": "events.jsonl",
+      "sha256": "5c98d6494cadcf36cacb4f62d86257b40ea1083752c54eae9987619045bf5f55"
+    },
+    "summary": {
+      "path": "summary.md",
+      "sha256": "f1cd5779720abc44c0bd4c432082e15646484a8accc2f353bf0265e6849d73bc"
+    }
+  }
+}

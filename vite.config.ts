@@ -39,7 +39,17 @@ function isServiceId(value: string | undefined): value is ServiceId {
   return value !== undefined && Object.hasOwn(servicePorts, value);
 }
 
-function assertResolvedServiceConfig(
+/**
+ * A resolved-configuration flag is only `boolean` at compile time. Vite resolves
+ * it at runtime from plugins, CLI flags and defaults, so this boundary treats it
+ * as untrusted and refuses a truthy substitute (`1`, `"false"`, `{}`) exactly as
+ * firmly as it refuses `false`.
+ */
+function isExactlyTrue(value: unknown): boolean {
+  return value === true;
+}
+
+export function assertResolvedServiceConfig(
   config: ResolvedConfig,
   serviceId: ServiceId,
   isPreview: boolean,
@@ -58,7 +68,7 @@ function assertResolvedServiceConfig(
     options.allowedHosts.every((host) => host === "127.0.0.1");
   const fileBoundaryIsExact =
     config.root === repositoryRoot &&
-    config.server.fs.strict === true &&
+    isExactlyTrue(config.server.fs.strict) &&
     config.server.fs.allow.length === 1 &&
     config.server.fs.allow[0] === repositoryRoot &&
     deniedServerPaths.every((pattern) =>
@@ -71,7 +81,7 @@ function assertResolvedServiceConfig(
   if (
     options.host !== "127.0.0.1" ||
     options.port !== servicePorts[serviceId] ||
-    !options.strictPort ||
+    !isExactlyTrue(options.strictPort) ||
     options.cors !== false ||
     !hostAllowlistIsLoopbackOnly ||
     !fileBoundaryIsExact ||

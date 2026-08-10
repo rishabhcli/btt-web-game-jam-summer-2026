@@ -178,7 +178,7 @@ const DEV_COMMANDS = Object.freeze({
   },
 });
 
-const PLAYWRIGHT_VERSION_PROBE = String.raw`
+export const PLAYWRIGHT_VERSION_PROBE = String.raw`
 import { chromium, firefox, webkit } from "playwright";
 import { createHash } from "node:crypto";
 import { constants as fileConstants } from "node:fs";
@@ -229,7 +229,7 @@ for (const [name, browserType] of Object.entries({ chromium, firefox, webkit }))
     await browser?.close();
   }
 }
-process.stdout.write(JSON.stringify(result) + "\\n");
+process.stdout.write(JSON.stringify(result) + "\n");
 if (failed) process.exitCode = 1;
 `;
 
@@ -1531,7 +1531,7 @@ function validateDownLifecycle(rawStdout, invocationId, upProof) {
   return { expectedInvocationId: invocationId, services };
 }
 
-function parseBrowserEvidence(rawStdout, commandOutcome) {
+export function parseBrowserEvidence(rawStdout, commandOutcome) {
   if (commandOutcome !== "PASS") return null;
   try {
     const parsedBrowsers = JSON.parse(rawStdout.trim());

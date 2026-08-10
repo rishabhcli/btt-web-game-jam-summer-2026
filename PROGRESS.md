@@ -346,3 +346,167 @@ git diff --check -- <lifecycle-owned-paths>
 Finish the in-flight Tier 0 safety edits, immediately rebuild/start/health-check
 all four services, run the sequential browser matrix, and then execute the
 clean-checkout verifier rather than treating the earlier health pass as current.
+
+## 2026-08-10 08:29 PDT — Repository-wide application progress audit and next-agent handoff
+
+### Production state and user outcome
+
+Not yet in production and not playable. The only browser outcome currently
+implemented is an intentionally truthful, accessible foundation-status page that
+says the rooms are unavailable. No player can commit a game command, use native
+Back/Forward to change a world state, create a branch or ghost, complete a room,
+or persist progress. This is still Tier 0 foundation work, not a partial game.
+
+This entry audits commit `a1ae0d6a92f73d07bf0155024677d944c79886b2` on
+`main`. Results below are current-worktree or remote-CI observations unless an
+artifact is explicitly named; they are not release claims.
+
+### What exists now
+
+| Area | Implemented truth | Important boundary |
+| --- | --- | --- |
+| Product shell | A small semantic status page, visible skip link, responsive CSS, reduced-motion CSS, and an explicit `playable: false` build status | It is not a game screen and contains no gameplay state |
+| Toolchain | Exact Node.js 24.19.0 and npm 11.17.0 contract, exact-pinned dependencies, lockfile, strict TypeScript project references, ESLint, Prettier, Vitest, fast-check, Playwright, and Vite | The ambient workstation Node.js 26.5.1 is outside the supported repository contract |
+| Ownership enforcement | AST-based domain import/nondeterminism checks, isolated TypeScript ambient types, local-state containment checks, coverage policy, and install-script policy | Only one pure source file currently exercises the domain boundary; gameplay packages do not exist |
+| Local services | Fail-closed ownership and health lifecycle for game `4140`, preview `4141`, E2E `4142`, and static bundle `4143`; reserved ports `4144`-`4149` are checked | Service health proves the status shell is served, not that gameplay works |
+| Verification | Unit, tooling, build, dependency-audit, three-browser shell E2E, automatic shell accessibility checks, and a preserving `verify-all` evidence runner | The canonical verifier is red, so Tier 0 has not exited |
+| CI | A SHA-pinned GitHub Actions workflow for Node 24, bootstrap, `verify-all`, and always-uploaded diagnostics | The only current `main` run fails during bootstrap before verification |
+| Architecture/docs | Product contract, goal ladder, two ADRs, dependency register, boundary policy, Tier 0 threat model, support matrix, assumption/blocker journals, and evidence protocol | These documents intentionally describe planned gameplay that has not been implemented |
+
+### End-goal gap by ownership area
+
+| End-goal area | Current state | Next proof required |
+| --- | --- | --- |
+| `src/engine` | Missing: no `WorldState`, command union/schema, reducer, canonical serialization, seeded randomness, fixed-step rule, or state hash | Encode the invariants in types and pure code; add generated legal-sequence determinism and malformed-command tests |
+| `src/history` | Missing: no History API adapter, opaque/versioned history entry, active branch graph, snapshots, `popstate`, reload, BFCache, or leave-site behavior | Real-browser Back/Forward, rapid navigation, refresh, BFCache, and initial-state exit tests |
+| `src/ghosts` | Missing: no discarded-suffix capture, replay preconditions, causality ordering, or visible desynchronization | Property/unit tests for exact command replay and integration tests for collision/precondition order |
+| `src/levels` | Missing: zero of eight authored rooms exist | Data-driven room contracts, solver/completability evidence, and per-input completion tests |
+| `src/render` | Missing: PixiJS is installed but unused; there is no game renderer, interpolation, timeline, transitions, particles, or quality scaling | Prove rendering is never authoritative and measure frame/input budgets on target devices |
+| `src/audio` | Missing: no Web Audio lifecycle, forward/reverse cue, mute control, or visual cue equivalent | Interaction-gated audio, mute persistence, suspension/resume, blocked-audio, and equivalence tests |
+| `src/input-accessibility` | Missing as a gameplay subsystem: no keyboard, pointer, touch, in-game Back/Forward equivalent, semantic help, canvas alternative, or focus model | Complete every released room in every supported mode; manual and automated accessibility matrix |
+| Persistence/recovery | Missing: `idb` and Zod are installed but unused; no schema, migration, branch/snapshot store, quota behavior, multi-tab policy, corruption recovery, or offline save | Versioned ingestion schema plus real IndexedDB failure, restart, migration, quota, corruption, and concurrency tests |
+| Deployment/operations | Missing: no public deployment, release manifest/SBOM, telemetry destination, SLO/dashboard, rollback drill, incident drill, soak, or real-user evidence | Reproducible tagged deployment and the Tier 10-12 evidence defined in `GOAL.md` |
+| Submission | Draft exists externally, but no approved product name, playable URL, screenshots, public video, or evidence-backed submission copy exists | Produce submission artifacts from the tested release and submit before the deadline in `HACKATHON.md` |
+
+### Tier and release-gate status
+
+- **Tier 0 — incomplete.** Most repository foundation mechanisms exist, but the
+  canonical local verifier and remote CI are red. Tier 0 cannot be promoted on
+  partial command success.
+- **Tiers 1-13 — not started as application outcomes.** Some Tier 7/10-style
+  tooling and documentation exists early, but that does not skip the lower
+  tiers or satisfy later evidence requirements.
+- **Release gate G1:** not met; zero playable/polished rooms.
+- **Release gate G2:** not met; there is no reducer or deterministic hash suite.
+- **Release gate G3:** not met; current browser tests cover only the static
+  foundation shell, not history lifecycle behavior.
+- **Release gate G4:** not met; no ghost exists to discover.
+- **Release gate G5:** not met; there is no gameplay input/frame performance
+  surface or mobile-device evidence.
+- **Release gate G6:** not met; the shell has a narrow automated accessibility
+  pass, but audio, save recovery, gameplay accessibility, and leaving-site
+  behavior are absent.
+
+### Commands and observed evidence
+
+All local commands in this audit that exercised repository tooling used the
+pinned Node.js 24.19.0 runtime by prepending
+`.dev/cache/toolchains/node-v24.19.0-darwin-arm64/bin` to `PATH`.
+
+```text
+npm run dev:down
+npm run dev:preflight
+npm run dev:up
+npm run dev:health
+npm run verify-all
+npm run test:e2e
+npm run test:e2e:preview
+npm run test:e2e:static
+gh run list --repo rishabhcli/btt-web-game-jam-summer-2026 --branch main
+gh run view 31402716548 --repo rishabhcli/btt-web-game-jam-summer-2026 --log-failed
+```
+
+Observed results:
+
+- A fresh exact-runtime lifecycle start and health probe passed for all four
+  exact-owned loopback HTTP services; ports `4144`-`4149` were free.
+- `npm run verify-all` **failed**. The preserved local run summary is
+  `evidence/runs/20260810T152632.603Z-2b1f1df77a07/summary.md`; it is local
+  diagnostic evidence until deliberately reviewed and committed. `check` failed
+  at `vite.config.ts:61:5` on
+  `@typescript-eslint/no-unnecessary-boolean-literal-compare`.
+- Within that failed verifier, the current narrow foundation unit suite passed
+  2/2 tests; the production-tooling suite passed 91/91; build passed; and the
+  local high-severity npm audit probe reported zero findings. The reported 100%
+  coverage is only five statements, two functions, and two branches across
+  `src/build-status.ts` and `src/foundation-view.ts`, with `src/main.ts`
+  explicitly excluded. It is not meaningful gameplay coverage.
+- The built shell contained a 1.47 kB JavaScript asset (0.83 kB gzip) and a
+  1.53 kB CSS asset (0.77 kB gzip). These are shell build observations, not game
+  bundle budgets.
+- Direct E2E runs passed 6/6 on Chromium, Firefox, and WebKit for each of the E2E
+  dev target, production preview, and static bundle target (18 checks total).
+  They prove only status copy, service identity, and absence of automatically
+  detected Axe violations on the foundation shell.
+- GitHub Actions run
+  <https://github.com/rishabhcli/btt-web-game-jam-summer-2026/actions/runs/31402716548>
+  for the audited commit **failed before `verify-all`**. `npm run bootstrap`
+  rejected the GitHub Actions-provided `npm_config_userconfig` with stable code
+  `BOOTSTRAP_NPM_POLICY_OVERRIDE`. No green CI run exists for `main`.
+
+### What became true
+
+- The current application gap is mapped to every repository ownership area
+  without treating installed dependencies, scaffolding, or shell tests as
+  gameplay progress.
+- Both immediate Tier 0 failures have exact reproduction locations instead of a
+  vague instruction to “finish setup.”
+- The next agent can distinguish the passing local shell surfaces from the red
+  canonical gate and from entirely missing application behavior.
+
+### Next-agent work queue
+
+Follow `GOAL.md` section 10 in this order; do not begin rooms, rendering polish,
+or content while Tier 0 is red.
+
+1. **Keep the development gate valid.** Use Node.js 24.19.0 and npm 11.17.0,
+   run `npm run dev:health`, and reconcile only exact repository-owned service
+   records. Running lifecycle commands under the ambient Node.js 26 binary can
+   make pinned-runtime supervisor records appear invalid; switch back to the
+   pinned runtime rather than deleting records or signalling broad process
+   sets.
+2. **Repair the local canonical gate.** Remove the unnecessary boolean-literal
+   comparison at `vite.config.ts:61:5`, add or adjust a focused regression test
+   if behavior could change, and make `npm run check` green without weakening
+   the lint rule.
+3. **Repair clean GitHub bootstrap.** Reconcile the fail-closed bootstrap policy
+   with the trusted `npm_config_userconfig` created by `actions/setup-node`.
+   Preserve protection against caller-controlled install-policy overrides; add
+   a tooling/CI-policy regression test for the exact trusted Actions shape
+   rather than allowlisting arbitrary user configuration.
+4. **Re-prove Tier 0 from the changed commit.** Restart/re-health services after
+   integrity-affecting edits, run the canonical `npm run verify-all` from a clean
+   checkout, review its redaction/digests, push, and require a green GitHub
+   Actions run. Append the committed run URL/artifact and exact outcomes here.
+5. **Then enter Tier 1.** Create the real `src/engine` ownership area with a
+   versioned serializable command schema, canonical `WorldState`, pure reducer,
+   deterministic serialization/hash contract, and seeded randomness. Add
+   property generators and rejection behavior before adding a playable room.
+   Continue until all seven invariants in `GOAL.md` Tier 1 have code paths and
+   named tests; do not claim Tier 1 from I1/I2 alone.
+
+The first two defects may be locally independent, but both are one Tier 0
+release-gate slice: no clean-checkout or CI result should be called green until
+both are fixed and the final commit is reverified.
+
+### Risks, migration, rollback, blockers
+
+- Risks: the verifier has never completed its browser/build matrix from a clean
+  checkout; CI has never reached verification; the exact toolchain differs from
+  the workstation default; current browser passes cover only non-game status
+  content; no application invariant exists in code.
+- Migration: none. No player persistence schema or saved player data exists.
+- Rollback: revert this documentation entry; it changes no runtime behavior,
+  schema, dependency, or service allocation.
+- External blockers: none. The two red Tier 0 gates are repository work, not
+  user or third-party blockers.

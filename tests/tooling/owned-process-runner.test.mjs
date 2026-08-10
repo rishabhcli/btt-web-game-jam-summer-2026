@@ -14,6 +14,23 @@ process.on("SIGTERM", () => {});
 setInterval(() => {}, 1_000);
 `;
 
+// A launcher shaped like `dev:up`: it starts a long-lived detached service,
+// prints the exact PID it claims to have left behind, then exits cleanly.
+const SERVICE_LAUNCHER = String.raw`
+const { spawn } = require("node:child_process");
+const service = spawn(
+  process.execPath,
+  ["--input-type=commonjs", "--eval", ${JSON.stringify(IGNORE_TERM_DESCENDANT)}],
+  { detached: true, stdio: "ignore" },
+);
+service.unref();
+process.stdout.write("DETACHED_PID=" + String(service.pid) + "\\n");
+// Stay alive past several tracking polls so the service is a *tracked*
+// descendant when the launcher exits; that is the state a real dev:up reaches
+// and the state the declaration has to be judged against.
+setTimeout(() => {}, 400);
+`;
+
 const HOSTILE_LEADER = String.raw`
 const { spawn } = require("node:child_process");
 const descendant = spawn(
@@ -156,6 +173,117 @@ test(
     await waitForPidToDisappear(pid);
   },
 );
+
+test(
+  "a declared surviving service is admitted while an undeclared one is still a leak",
+  { skip: process.platform === "win32" },
+  async () => {
+    const lifecycleOptions = {
+      args: ["--input-type=commonjs", "--eval", SERVICE_LAUNCHER],
+      command: process.execPath,
+      cwd: REPOSITORY_ROOT,
+      env: { PATH: process.env.PATH ?? "/usr/bin:/bin" },
+      homeDirectory: ".dev/tmp/lifecycle-home",
+      killVerificationMs: 2_000,
+      outputMode: "capture",
+      terminationGraceMs: 500,
+      timeoutMs: 15_000,
+    };
+
+    const declared = await runOwnedProcess({
+      ...lifecycleOptions,
+      declareSurvivingDescendants: ({ stdout }) => [detachedPid(stdout)],
+    });
+    const survivorPid = detachedPid(declared.stdout);
+    assert.equal(declared.cleanupProven, true);
+    assert.equal(declared.exitCode, 0);
+    assert.deepEqual(declared.declaredSurvivorPids, [survivorPid]);
+    assert.ok(
+      declared.survivingDescendants.some(
+        (entry) => entry.pid === survivorPid && entry.declared === true,
+      ),
+    );
+    // Still alive because it was declared, not because the check was skipped.
+    process.kill(survivorPid, 0);
+    process.kill(survivorPid, "SIGKILL");
+    await waitForPidToDisappear(survivorPid);
+
+    // The same launcher without a declaration is an ordinary leak.
+    let undeclaredFailure;
+    try {
+      await runOwnedProcess(lifecycleOptions);
+    } catch (error) {
+      undeclaredFailure = error;
+    }
+    assert.ok(undeclaredFailure instanceof OwnedProcessError);
+    assert.equal(
+      undeclaredFailure.code,
+      "OWNED_PROCESS_DESCENDANTS_AFTER_EXIT",
+    );
+    await waitForPidToDisappear(detachedPid(undeclaredFailure.result.stdout));
+
+    // A declaration that does not cover the survivor is refused as well.
+    let mismatchedFailure;
+    try {
+      await runOwnedProcess({
+        ...lifecycleOptions,
+        declareSurvivingDescendants: ({ stdout }) => [
+          detachedPid(stdout) + 1_000_000,
+        ],
+      });
+    } catch (error) {
+      mismatchedFailure = error;
+    }
+    assert.ok(mismatchedFailure instanceof OwnedProcessError);
+    assert.equal(
+      mismatchedFailure.code,
+      "OWNED_PROCESS_DESCENDANTS_AFTER_EXIT",
+    );
+    await waitForPidToDisappear(detachedPid(mismatchedFailure.result.stdout));
+
+    // A throwing declaration fails closed rather than admitting the survivor.
+    let throwingFailure;
+    try {
+      await runOwnedProcess({
+        ...lifecycleOptions,
+        declareSurvivingDescendants: () => {
+          throw new Error("declaration unavailable");
+        },
+      });
+    } catch (error) {
+      throwingFailure = error;
+    }
+    assert.ok(throwingFailure instanceof OwnedProcessError);
+    assert.equal(throwingFailure.result.cleanupProven, false);
+    await waitForPidToDisappear(detachedPid(throwingFailure.result.stdout));
+  },
+);
+
+test("declaring survivors without a caller-owned home is refused", async () => {
+  await assert.rejects(
+    runOwnedProcess({
+      args: ["--version"],
+      command: process.execPath,
+      cwd: REPOSITORY_ROOT,
+      declareSurvivingDescendants: () => [2],
+      outputMode: "capture",
+      timeoutMs: 5_000,
+    }),
+    { code: "OWNED_PROCESS_SURVIVOR_HOME_REQUIRED" },
+  );
+  await assert.rejects(
+    runOwnedProcess({
+      args: ["--version"],
+      command: process.execPath,
+      cwd: REPOSITORY_ROOT,
+      declareSurvivingDescendants: "not-a-function",
+      homeDirectory: ".dev/tmp/lifecycle-home",
+      outputMode: "capture",
+      timeoutMs: 5_000,
+    }),
+    { code: "OWNED_PROCESS_SURVIVOR_DECLARATION_INVALID" },
+  );
+});
 
 test(
   "parent SIGTERM is converted into bounded exact-tree cancellation",

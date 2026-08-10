@@ -577,6 +577,23 @@ function validateOptions(options) {
       "outputMode must be capture or inherit",
     );
   }
+  if (options.declareSurvivingDescendants !== undefined) {
+    if (typeof options.declareSurvivingDescendants !== "function") {
+      throw new OwnedProcessError(
+        "OWNED_PROCESS_SURVIVOR_DECLARATION_INVALID",
+        "declareSurvivingDescendants must be a function",
+      );
+    }
+    // The run scratch is removed once cleanup is proven, and it holds the
+    // child's HOME unless the caller supplies one. A survivor must not be left
+    // pointing at a deleted home directory, so the caller has to own it.
+    if (typeof options.homeDirectory !== "string") {
+      throw new OwnedProcessError(
+        "OWNED_PROCESS_SURVIVOR_HOME_REQUIRED",
+        "declareSurvivingDescendants requires a caller-owned homeDirectory that outlives the run scratch",
+      );
+    }
+  }
 }
 
 /**
@@ -604,15 +621,27 @@ export async function runOwnedProcess(options) {
   const runScratch = mkdtempSync(
     resolve(REPOSITORY_ROOT, OWNED_PROCESS_ROOT, `${randomUUID()}-`),
   );
-  const home = options.homeDirectory
-    ? requireRepositoryDirectory(options.homeDirectory, "owned process home")
-    : resolve(runScratch, "home");
-  if (!options.homeDirectory) mkdirSync(home, { mode: 0o700 });
-  const environment = createScratchEnvironment(
-    options.env ?? {},
-    runScratch,
-    home,
-  );
+  let home;
+  let environment;
+  try {
+    if (options.homeDirectory) {
+      validateLocalDirectory(options.homeDirectory, {
+        create: true,
+        privateMode: true,
+      });
+      home = requireRepositoryDirectory(
+        options.homeDirectory,
+        "owned process home",
+      );
+    } else {
+      home = resolve(runScratch, "home");
+      mkdirSync(home, { mode: 0o700 });
+    }
+    environment = createScratchEnvironment(options.env ?? {}, runScratch, home);
+  } catch (error) {
+    rmSync(runScratch, { force: true, recursive: true });
+    throw error;
+  }
   const outputMode = options.outputMode ?? "inherit";
   const maxOutputBytes = options.maxOutputBytes ?? DEFAULT_MAX_OUTPUT_BYTES;
   const terminationGraceMs = Math.min(
@@ -930,6 +959,75 @@ export async function runOwnedProcess(options) {
     return false;
   };
 
+  // A lifecycle command such as `dev:up` exists in order to leave services
+  // running, so "no descendant survived" is the wrong contract for it. The
+  // caller instead declares, from the command's own machine-readable output,
+  // the exact process identities it claims to have left behind. Anything alive
+  // that is not one of those identities — or a live descendant of one — is
+  // still a leak, is still refused, and is still terminated. A declaration that
+  // is absent, malformed, empty, or that fails to cover every survivor fails
+  // closed, so this can only ever narrow what is tolerated, never widen it.
+  let declaredSurvivorPids = null;
+  let survivingDescendants = null;
+  const admitDeclaredSurvivors = async (live, draft) => {
+    if (typeof options.declareSurvivingDescendants !== "function") return false;
+    let declared;
+    try {
+      declared = await options.declareSurvivingDescendants(
+        Object.freeze(draft),
+      );
+    } catch (error) {
+      trackingFailure ??= error;
+      return false;
+    }
+    if (
+      !Array.isArray(declared) ||
+      declared.length === 0 ||
+      declared.some(
+        (pid) => !Number.isSafeInteger(pid) || pid <= 1 || pid === rootPid,
+      )
+    ) {
+      return false;
+    }
+    declaredSurvivorPids = Object.freeze(
+      [...new Set(declared)].sort((a, b) => a - b),
+    );
+
+    const liveByPid = new Map(live.map((identity) => [identity.pid, identity]));
+    const permitted = new Set(
+      declaredSurvivorPids.filter((pid) => liveByPid.has(pid)),
+    );
+    if (permitted.size !== declaredSurvivorPids.length) return false;
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const identity of live) {
+        if (permitted.has(identity.pid)) continue;
+        if (
+          permitted.has(identity.parentPid) ||
+          permitted.has(identity.processGroupId)
+        ) {
+          permitted.add(identity.pid);
+          grew = true;
+        }
+      }
+    }
+    if (live.some((identity) => !permitted.has(identity.pid))) return false;
+    survivingDescendants = Object.freeze(
+      live
+        .map((identity) =>
+          Object.freeze({
+            pid: identity.pid,
+            parentPid: identity.parentPid,
+            processGroupId: identity.processGroupId,
+            declared: declaredSurvivorPids.includes(identity.pid),
+          }),
+        )
+        .sort((left, right) => left.pid - right.pid),
+    );
+    return true;
+  };
+
   let outcome;
   let cleanupProven = false;
   let forcedTermination = false;
@@ -943,13 +1041,24 @@ export async function runOwnedProcess(options) {
     if (outcome.kind === "close" && process.platform !== "win32") {
       try {
         const snapshot = await refreshTrackedProcesses();
+        const live = liveOwnedProcesses(snapshot);
         if (!rootIdentity) {
           const error = new Error(
             "owned process leader exited before an exact identity was captured",
           );
           trackingFailure ??= error;
           outcome = { kind: "tracking-failure", error };
-        } else if (liveOwnedProcesses(snapshot).length === 0) {
+        } else if (live.length === 0) {
+          cleanupProven = true;
+        } else if (
+          await admitDeclaredSurvivors(live, {
+            exitCode: closeResult?.exitCode ?? null,
+            orderedOutput,
+            signal: closeResult?.signal ?? null,
+            stderr,
+            stdout,
+          })
+        ) {
           cleanupProven = true;
         } else outcome = { kind: "descendants-after-exit" };
       } catch (error) {
@@ -994,12 +1103,14 @@ export async function runOwnedProcess(options) {
 
   const result = Object.freeze({
     cleanupProven,
+    declaredSurvivorPids,
     errorCode: spawnError?.code ?? null,
     exitCode: closeResult?.exitCode ?? null,
     forcedTermination,
     interruptionSignal: interruptionSignal ?? null,
     orderedOutput: Object.freeze(orderedOutput),
     outputLimitExceeded,
+    survivingDescendants,
     processTreeScope:
       process.platform === "win32"
         ? "windows-taskkill-tree"

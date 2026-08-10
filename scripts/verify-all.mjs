@@ -28,6 +28,10 @@ const REQUIRED_NODE_VERSION = "v24.19.0";
 const REQUIRED_NPM_VERSION = "11.17.0";
 const LIFECYCLE_SCHEMA_VERSION = "btt.dev-lifecycle/v1";
 const LIFECYCLE_RESULT_PREFIX = "DEV_LIFECYCLE_RESULT ";
+// Services started by `dev:up` outlive their launcher, so their HOME must
+// outlive the launcher's per-run scratch directory too. This one is owned by
+// the repository's ignored local-state tree, not by an individual run.
+const LIFECYCLE_HOME_DIRECTORY = ".dev/tmp/lifecycle-home";
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 const EXPECTED_PORTS = Object.freeze({
@@ -109,6 +113,17 @@ const DEV_COMMANDS = Object.freeze({
     args: ["run", "dev:up"],
     kind: "lifecycle",
     timeoutMs: 3 * 60 * 1000,
+    // `dev:up` exists to leave four supervised services running, so the owned
+    // runner's default "nothing may survive" contract would terminate exactly
+    // what the next steps need. The survivors are instead declared from the
+    // command's own DEV_LIFECYCLE_RESULT proof, so a process it did not claim
+    // to start is still refused and still terminated.
+    declareSurvivingDescendants({ stdout }) {
+      const proof = validateUpLifecycle(stdout);
+      if (!proof.valid || proof.services === null) return [];
+      return proof.services.map((service) => service.pid);
+    },
+    homeDirectory: LIFECYCLE_HOME_DIRECTORY,
   },
   health: {
     id: "dev_health",
@@ -697,6 +712,8 @@ function verifierRunnerResult(result, overrides = {}) {
     processTreeScope: result?.processTreeScope ?? null,
     trackedDescendantCount: result?.trackedDescendantCount ?? 0,
     descendantTrackingErrorCode: result?.trackingError ?? null,
+    declaredSurvivorPids: result?.declaredSurvivorPids ?? null,
+    survivingDescendantCount: result?.survivingDescendants?.length ?? 0,
     errorCode: result?.errorCode ?? null,
     errorMessage: null,
     totalOutputBytes: result?.totalOutputBytes ?? 0,
@@ -718,6 +735,13 @@ export function createProcessRunner() {
         terminationGraceMs: specification.terminationGraceMs,
         killVerificationMs: specification.killVerificationMs,
         abortSignal: specification.abortSignal,
+        ...(specification.declareSurvivingDescendants
+          ? {
+              declareSurvivingDescendants:
+                specification.declareSurvivingDescendants,
+              homeDirectory: specification.homeDirectory,
+            }
+          : {}),
         onOutput(stream, text) {
           onChunk(stream, text);
         },
@@ -989,6 +1013,8 @@ function persistCommandCapture({ capture, writer, redact, tee }) {
     processTreeScope: runnerResult.processTreeScope,
     trackedDescendantCount: runnerResult.trackedDescendantCount,
     descendantTrackingErrorCode: runnerResult.descendantTrackingErrorCode,
+    declaredSurvivorPids: runnerResult.declaredSurvivorPids ?? null,
+    survivingDescendantCount: runnerResult.survivingDescendantCount ?? 0,
     errorCode: runnerResult.errorCode,
     observedOutputBytes: runnerResult.totalOutputBytes,
     redactedStdoutSha256: sha256(completeOutput.stdout),

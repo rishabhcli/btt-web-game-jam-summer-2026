@@ -210,13 +210,35 @@ export function parseMacProcessTable(output, expectedSeedCount) {
   return processes;
 }
 
-function readLinuxProcessTable() {
+/**
+ * Read the Linux process table from `/proc`.
+ *
+ * The directory listing deliberately does *not* request file types: on `/proc`
+ * a `withFileTypes` scan makes libuv `lstat` any entry whose `d_type` is
+ * unknown, and a process that exits between the scan and that stat makes the
+ * whole listing throw `ENOENT`. That turned an ordinary short-lived process
+ * elsewhere on the machine into a tracking failure, which is then treated as
+ * unproven cleanup and escalates to killing the command under test. Filtering
+ * numeric names and letting the per-process stat read handle disappearance is
+ * both race-free and strictly more informative.
+ *
+ * Only `ENOENT`/`ESRCH` are tolerated per process, because those mean the
+ * process is genuinely gone. A permission or filesystem error still fails
+ * closed rather than silently under-reporting the tree.
+ *
+ * @param {{readDirectory?: () => string[], readStat?: (pid: string) => string}} [io]
+ *   Injected for tests; production always reads the real `/proc`.
+ */
+export function readLinuxProcessTable(io = {}) {
+  const readDirectory = io.readDirectory ?? (() => readdirSync("/proc"));
+  const readStat =
+    io.readStat ?? ((pid) => readFileSync(`/proc/${pid}/stat`, "utf8"));
   const processes = [];
-  for (const entry of readdirSync("/proc", { withFileTypes: true })) {
-    if (!entry.isDirectory() || !/^\d+$/u.test(entry.name)) continue;
+  for (const name of readDirectory()) {
+    if (!/^\d+$/u.test(name)) continue;
     let source;
     try {
-      source = readFileSync(`/proc/${entry.name}/stat`, "utf8");
+      source = readStat(name);
     } catch (error) {
       if (error?.code === "ENOENT" || error?.code === "ESRCH") continue;
       throw error;

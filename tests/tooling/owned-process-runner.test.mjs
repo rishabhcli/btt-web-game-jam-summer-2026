@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   OwnedProcessError,
   parseMacProcessTable,
+  readLinuxProcessTable,
   runOwnedProcess,
 } from "../../scripts/owned-process-runner.mjs";
 import { REPOSITORY_ROOT } from "../../scripts/check-local-state.mjs";
@@ -78,6 +79,54 @@ test("standalone bootstrap and Playwright entrypoints use the owned runner", () 
     assert.doesNotMatch(source, /\bspawnSync\b/u, relativePath);
     assert.doesNotMatch(source, /\bspawn\s*\(/u, relativePath);
   }
+});
+
+test("the Linux process table survives a process that exits mid-scan", () => {
+  function statLine(pid, { parentPid = 1, groupId = pid, ticks = 4242 } = {}) {
+    const fields = [
+      String(parentPid),
+      String(groupId),
+      "7",
+      ...Array(15).fill("0"),
+      String(ticks),
+    ];
+    return `${String(pid)} (node (worker)) S ${fields.join(" ")}\n`;
+  }
+  function vanished(code) {
+    const error = new Error(`${code}: gone`);
+    error.code = code;
+    return error;
+  }
+
+  // A busy machine constantly reaps processes between the directory listing
+  // and the per-process read. That must skip the entry, never abort the scan.
+  const table = readLinuxProcessTable({
+    readDirectory: () => ["1", "self", "444", "555", "666", "cpuinfo"],
+    readStat: (pid) => {
+      if (pid === "555") throw vanished("ENOENT");
+      if (pid === "666") throw vanished("ESRCH");
+      return statLine(Number(pid));
+    },
+  });
+  assert.deepEqual(
+    table.map((entry) => entry.pid),
+    [1, 444],
+  );
+  assert.equal(table[1].startToken, "4242");
+  assert.equal(table[1].sessionId, "7");
+
+  // A permission or filesystem fault is not disappearance and must fail closed
+  // rather than silently under-reporting the owned tree.
+  assert.throws(
+    () =>
+      readLinuxProcessTable({
+        readDirectory: () => ["444"],
+        readStat: () => {
+          throw vanished("EACCES");
+        },
+      }),
+    { code: "EACCES" },
+  );
 });
 
 test("macOS native snapshots require an explicit non-truncation proof", () => {
